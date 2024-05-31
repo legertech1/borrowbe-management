@@ -1,0 +1,125 @@
+.global_mangement {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.global_mangement .dropdown_cont {
+  z-index: 99;
+}
+
+.global_mangement .main {
+  width: 85%;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.global_mangement .main .content {
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.global_mangement .header_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.global_mangement .filter_section {
+  padding: 20px 15px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.global_mangement .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  column-gap: 20px;
+}
+
+.global_mangement .max_input_cont {
+  display: inline-block;
+  width: 200px;
+}
+.global_mangement .add_filter_cont {
+  width: 200px;
+  display: inline-block;
+  margin-bottom: -10px;
+}
+
+.global_mangement .box1 {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  /* gap : 10px; */
+}
+
+.global_mangement .box2 {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.global_mangement .box3 {
+  width: 35%;
+}
+
+.global_mangement .box4 {
+  width: 5%;
+}
+
+.global_mangement .btns_cont {
+  width: 60%;
+}
+
+.global_mangement .btn {
+  margin-left: 20px;
+}
+
+
+
+.global_mangement .table_cont {
+  overflow: scroll;
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+.global_mangement .qty_label {
+  font-size: 14px;
+}
+.global_mangement .qty_cont{
+  text-align: right;
+  font-size: 14px;
+}
+.global_mangement .qty_cont .flex {
+    display: flex;
+    justify-content: end;
+    gap:5px;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.global_mangement .qty_cont input {
+  /* width: 200px; */
+  margin-bottom: 0px !important;
+}
+
+.global_mangement .input_cont {
+  position: relative;
+
+}
+
+.global_mangement .max_show {
+  position: absolute;
+
+}

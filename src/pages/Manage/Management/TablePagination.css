@@ -1,0 +1,77 @@
+.table_cont .pagination-footer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.table_cont .page-number {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 0 2px;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.table_cont .page-number:hover {
+  background-color: #f0f0f0;
+}
+
+.table_cont .page-number.active {
+  background-color: var(--blue);
+  color: #fff;
+}
+
+.table_cont .page-number.disabled {
+  cursor: not-allowed;
+}
+
+.table_cont .page-number.disabled:hover {
+  background-color: transparent;
+  color: #999;
+}
+
+.table_cont .page-number:last-child {
+  margin-right: 0;
+}
+
+.table_cont .page-number:first-child {
+  margin-left: 0;
+}
+
+.table_cont .page-number.ellipsis {
+  cursor: default;
+}
+
+.table_cont .button {
+  cursor: pointer;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--blue);
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.table_cont .button:hover {
+  background-color: #0056b3;
+}
+
+.table_cont .button:disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #666;
+}
+
+.table_cont .button:disabled:hover {
+  background-color: #ccc;
+}
+
+.table_cont .px-3 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

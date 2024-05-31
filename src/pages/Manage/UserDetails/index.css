@@ -1,0 +1,83 @@
+.manage_profile {
+  width: 85%;
+  margin: 0 auto;
+}
+.manage_profile .user_profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.manage_profile .row {
+  display: flex;
+  flex-direction: row;
+  column-gap: 30px;
+  padding: 20px;
+}
+
+.manage_profile .col {
+  width: 50%;
+
+}
+
+.manage_profile .col .label_cont {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.manage_profile .col .label_heading {
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.manage_profile .label_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.manage_profile .label_col {
+  text-align: left;
+}
+
+.manage_profile .value_col {
+  font-size: 14px;
+}
+
+.manage_profile .admin_image_cont {
+  position: relative;
+  display: inline-block;
+}
+
+.manage_profile .carousel_delete_icon {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #444c;
+  color: white;
+  box-shadow: 0 0 8px #1118;
+  transition: all 0.3s var(--bc);
+  opacity: 1;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.manage_profile .ad_loction {
+  padding: 20px;
+  /* filter: drop-shadow(0 0 8px #ccc); */
+
+}
+
+

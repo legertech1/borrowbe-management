@@ -1,0 +1,81 @@
+.expand-page .expanded-user-details {
+  display: flex;
+  flex-direction: row;
+  padding: 16px;
+  column-gap: 40px;
+}
+
+.expand-page .expanded-user-details h2 {
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+.user-info,
+.user-address,
+.user-other-details {
+  margin-bottom: 16px;
+}
+
+.user-info p,
+.user-address p,
+.user-other-details p {
+  margin: 8px 0;
+}
+
+.user-info strong,
+.user-address strong,
+.user-other-details strong {
+  font-weight: 500;
+  color: #333;
+}
+
+.expand-page .perm_cont {
+  /* 3 in a row */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.expand-page .perm_cont .perm_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 12px;
+  width: 25%;
+}
+
+.expand-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.expand-page .user-other-details .perms-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.expand-page .tags_cont {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.expand-page .tags_cont .tag {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 4px;
+}

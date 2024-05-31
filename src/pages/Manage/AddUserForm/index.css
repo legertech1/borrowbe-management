@@ -1,0 +1,23 @@
+.add_user_modal {
+  max-width: 1000px;
+  min-width: 400px;
+}
+
+.add_user_modal .perm_cont {
+  /* 3 in a row */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.add_user_modal .perm_cont .perm_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 12px;
+  width: 30%;
+}

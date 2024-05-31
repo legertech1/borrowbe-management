@@ -1,0 +1,23 @@
+.admin_panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.admin_panel ul {
+  list-style: none;
+}
+
+.admin_panel ul li {
+  margin: 10px 0;
+}
+
+.admin_panel ul li a {
+  font-size: 1.2rem;
+}
+
+.admin_panel h1 {
+  font-size: 2rem;
+}

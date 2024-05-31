@@ -1,0 +1,183 @@
+.manage-shared-input_cont {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.admin_label {
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+.field_map_cont {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+
+
+.form_col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.manage-shared-textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.manage-shared-input_cont .manage-shared-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  height: 25px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.field_map_cont .manage-shared-input {
+  width: 482px;
+}
+
+.manage-shared-select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 12px;
+  height: 43px;
+  margin-top: 5px;
+}
+
+
+.field_map_cont .manage-shared-select {
+  width: 500px;
+}
+
+.manage-shared-radio {
+  margin-right: 6px;
+}
+
+.manage-shared-checkbox {
+  margin-right: 6px;
+}
+
+.manage-shared-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--blue);
+  margin-right: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.manage-shared-button .loader {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 5px solid #ffffff;
+  border-top-color: var(--gray);
+  animation: spin 1s infinite linear;
+}
+
+.primary {
+  background-color: var(--blue);
+  color: #fff;
+}
+
+.secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.warning {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.error {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.manage-switch-input {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.manage-switch-input input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.manage-switch-input .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.manage-switch-input .slider:before {
+  position: absolute;
+  content: "";
+
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.manage-switch-input input:checked + .slider {
+  background-color: #2196f3;
+}
+
+.manage-switch-input input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+.manage-switch-input input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.manage-switch-input .slider.round {
+  border-radius: 34px;
+}
+
+.manage-switch-input .slider.round:before {
+  border-radius: 50%;
+}

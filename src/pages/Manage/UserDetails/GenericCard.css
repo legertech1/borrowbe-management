@@ -1,0 +1,28 @@
+.manage_card {
+  margin: 16px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.manage_card .card_header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #6c757d;
+  padding: 0px 16px;
+  color: white;
+}
+
+.manage_card .card_header .title {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.manage_card .actions {
+  margin-top: 7px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  column-gap: 10px;
+}
