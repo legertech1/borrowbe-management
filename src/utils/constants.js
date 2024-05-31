@@ -43,7 +43,6 @@ export const AD_IMAGES_LIMIT = 20;
 export const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const NODE_ENV = process.env.NODE_ENV;
-console.log("NODE_ENV",NODE_ENV)
 
 export const ADS_LIMIT = 5;
 
