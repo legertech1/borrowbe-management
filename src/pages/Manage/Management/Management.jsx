@@ -14,7 +14,6 @@ import {
   conditions,
   prepareDataForTable,
 } from "./manageConfig";
-import Spinner from "../../../components/Loader";
 import GenericTable from "./GenericTable";
 import { Select, Input, Button } from "../ManageShared";
 import { Link } from "react-router-dom";

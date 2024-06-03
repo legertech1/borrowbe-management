@@ -12,7 +12,6 @@ import {
   prepareDataForTable,
   prepareSearchesData,
 } from "../Management/manageConfig";
-import Spinner from "../../../components/Loader";
 import GenericTable from "../Management/GenericTable";
 
 const UserDetails = () => {
@@ -183,79 +182,75 @@ const UserDetails = () => {
   };
 
   return (
-    <Spinner loading={loading}>
-      <div className="manage_profile">
-        <div className="user_profile">
-          <div>
-            <Link to="/n">Back to home</Link>
-          </div>
-          <GenericCard
-            hide={true}
-            title={`Customer : ${user.firstName} ${user.lastName} / ${user.email} / ${user._id}`}
-          ></GenericCard>
-          <GeneralInfo user={user} handleSave={handleSave} />
-          <AddressInfo user={user} handleSave={handleSave} />
-          <ContactDetails user={user} handleSave={handleSave} />
-          <GenericCard hide={true} title={`User's Listings:`}>
-            <div className="table_cont">
-              <GenericTable
-                multiple={true}
-                columns={userAdsColumns}
-                data={ads}
-                // pagination={{
-                //   currentPage: 1,
-                //   totalPages: 1,
-                // }}
-                pagination={pagination}
-                onPageChange={handlePageChange}
-                expand={false}
-                hideAction={false}
-                currentCollection={COLLECTIONS_NAMES.AD}
-                updateItems={updateItems}
-                deleteItems={deleteItems}
-              />
-            </div>
-          </GenericCard>
-          <GenericCard hide={true} title={`My Favorite:`}>
-            <div className="table_cont">
-              <GenericTable
-                multiple={true}
-                columns={favtAdsColumns}
-                data={favtAds}
-                pagination={{
-                  currentPage: 1,
-                  totalPages: 1,
-                }}
-                expand={false}
-                hideAction={false}
-                currentCollection={"FavoriteAds"}
-                updateItems={updateItems}
-                deleteItems={deleteItems}
-              />
-            </div>
-          </GenericCard>
-          <GenericCard hide={true} title={`Saved Searches:`}>
-            <div className="table_cont">
-              <GenericTable
-                hideAction={true}
-                multiple={false}
-                columns={
-                  prepareSearchesData(user?.data?.searches || []).columns
-                }
-                data={prepareSearchesData(user?.data?.searches || []).rows}
-                pagination={{
-                  currentPage: 1,
-                  totalPages: 1,
-                }}
-                expand={false}
-                currentCollection={"Saved"}
-                updateItems={updateItems}
-              />
-            </div>
-          </GenericCard>
+    <div className="manage_profile">
+      <div className="user_profile">
+        <div>
+          <Link to="/n">Back to home</Link>
         </div>
+        <GenericCard
+          hide={true}
+          title={`Customer : ${user.firstName} ${user.lastName} / ${user.email} / ${user._id}`}
+        ></GenericCard>
+        <GeneralInfo user={user} handleSave={handleSave} />
+        <AddressInfo user={user} handleSave={handleSave} />
+        <ContactDetails user={user} handleSave={handleSave} />
+        <GenericCard hide={true} title={`User's Listings:`}>
+          <div className="table_cont">
+            <GenericTable
+              multiple={true}
+              columns={userAdsColumns}
+              data={ads}
+              // pagination={{
+              //   currentPage: 1,
+              //   totalPages: 1,
+              // }}
+              pagination={pagination}
+              onPageChange={handlePageChange}
+              expand={false}
+              hideAction={false}
+              currentCollection={COLLECTIONS_NAMES.AD}
+              updateItems={updateItems}
+              deleteItems={deleteItems}
+            />
+          </div>
+        </GenericCard>
+        <GenericCard hide={true} title={`My Favorite:`}>
+          <div className="table_cont">
+            <GenericTable
+              multiple={true}
+              columns={favtAdsColumns}
+              data={favtAds}
+              pagination={{
+                currentPage: 1,
+                totalPages: 1,
+              }}
+              expand={false}
+              hideAction={false}
+              currentCollection={"FavoriteAds"}
+              updateItems={updateItems}
+              deleteItems={deleteItems}
+            />
+          </div>
+        </GenericCard>
+        <GenericCard hide={true} title={`Saved Searches:`}>
+          <div className="table_cont">
+            <GenericTable
+              hideAction={true}
+              multiple={false}
+              columns={prepareSearchesData(user?.data?.searches || []).columns}
+              data={prepareSearchesData(user?.data?.searches || []).rows}
+              pagination={{
+                currentPage: 1,
+                totalPages: 1,
+              }}
+              expand={false}
+              currentCollection={"Saved"}
+              updateItems={updateItems}
+            />
+          </div>
+        </GenericCard>
       </div>
-    </Spinner>
+    </div>
   );
 };
 

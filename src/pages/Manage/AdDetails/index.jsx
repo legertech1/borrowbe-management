@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Spinner from "../../../components/Loader";
 import AdGeneralInfo from "./AdGeneralInfo";
-import { ALL_PERMISSIONS_OBJ, userCan } from "../../../utils/rbac";
 import apis from "../../../services/api";
 import axios from "axios";
 import AdImages from "./AdImages";
@@ -70,7 +68,7 @@ const AdDetails = () => {
   }, [params.id]);
 
   return (
-    <Spinner loading={loading}>
+    
       <div className="manage_profile">
         <div className="user_profile">
           <div>
@@ -82,7 +80,7 @@ const AdDetails = () => {
           {ad && <AdFieldMapAdmin ad={ad} handleSave={handleSave} />}
         </div>
       </div>
-    </Spinner>
+
   );
 };
 
