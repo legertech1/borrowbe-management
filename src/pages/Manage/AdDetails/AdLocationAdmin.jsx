@@ -32,28 +32,29 @@ export default function AdLocationAdmin({ ad, handleSave }) {
     });
   };
 
-  useEffect(() => {
-    location &&
-      geocodeByAddress(location.description || location.name).then(
-        async (results) => {
-          const { lat, lng } = await getLatLng(results[0]);
-          let address_components = parseAdressComponents(
-            results[0].address_components
-          );
-          setLocationToSave({
-            formatted_address: results[0].formatted_address,
-            types: results[0].types,
-            name: location.description || location.name,
-            place_id: location.place_id,
-            coordinates: {
-              lat: lat,
-              long: lng,
-            },
-            components: address_components,
-          });
-        }
-      );
-  }, [location]);
+  // console.log(ad);
+  // useEffect(() => {
+  //   location &&
+  //     geocodeByAddress( location.name).then(
+  //       async (results) => {
+  //         const { lat, lng } = await getLatLng(results[0]);
+  //         let address_components = parseAdressComponents(
+  //           results[0].address_components
+  //         );
+  //         setLocationToSave({
+  //           formatted_address: results[0].formatted_address,
+  //           types: results[0].types,
+  //           name: location.description || location.name,
+  //           place_id: location.place_id,
+  //           coordinates: {
+  //             lat: lat,
+  //             long: lng,
+  //           },
+  //           components: address_components,
+  //         });
+  //       }
+  //     );
+  // }, [location]);
 
   return (
     <GenericCard
@@ -63,7 +64,7 @@ export default function AdLocationAdmin({ ad, handleSave }) {
       handleCancelClick={handleCancelClick}
       handleEditClick={handleEditClick}
     >
-      <div className="ad_loction">{"----Need chnaged---"}</div>
+      <div className="ad_loction">{"----Need changes---"}</div>
     </GenericCard>
   );
 }
