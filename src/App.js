@@ -11,6 +11,7 @@ import Management from "./pages/Manage/Management/Management";
 import UserDetails from "./pages/Manage/UserDetails";
 import AdDetails from "./pages/Manage/AdDetails";
 import AdminPanel from "./pages/Manage/AdminPanel";
+import { fetchCategories } from "./store/categorySlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
 
   useEffect(() => {
     dispatch(me());
+    dispatch(fetchCategories());
   }, []);
 
   return (

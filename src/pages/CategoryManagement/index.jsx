@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./index.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
 import apis from "../../services/api";
@@ -9,21 +9,20 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import HistoryIcon from "@mui/icons-material/History";
 import AddIcon from "@mui/icons-material/Add";
 import Input from "../../components/Shared/Input";
-import Modal from "../../components/Modal";
 import Dropdown from "../../components/Shared/Dropdown";
 import ImageIcon from "@mui/icons-material/Image";
 import parseImage from "../../utils/parseImage";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { ArrowDropDown, Height, KeyboardArrowDown } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { fetchCategories } from "../../store/categorySlice";
 
 function CategoryManagement() {
   const user = useSelector((state) => state.auth);
-  const [data, setData] = useState([]);
+  const data = useSelector((state) => state.categories);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -73,9 +72,9 @@ function CategoryManagement() {
     days: "",
     price: "",
   });
-
+  const dispatch = useDispatch();
   const getCatgeories = async () => {
-    setData((await axios.get(apis.getCategoryData)).data);
+    dispatch(fetchCategories());
     setSelectedCategories([]);
     setSelectedSubCategories([]);
     setSelectedCategoryFields([]);
