@@ -21,6 +21,9 @@ const categorySlice = createSlice({
         ),
       ];
     },
+    setCategories:(state , action)=>{
+      return [...action.payload]
+    }
   },
   extraReducers: (biulder) => {
     biulder.addCase(fetchCategories.fulfilled, (state, action) => {
@@ -29,4 +32,4 @@ const categorySlice = createSlice({
   },
 });
 export default categorySlice;
-export const { patchUpdate } = categorySlice.actions;
+export const { patchUpdate, setCategories } = categorySlice.actions;

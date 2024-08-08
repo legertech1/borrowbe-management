@@ -16,9 +16,14 @@ import Dropdown from "../../components/Shared/Dropdown";
 import ImageIcon from "@mui/icons-material/Image";
 import parseImage from "../../utils/parseImage";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { ArrowDropDown, Height, KeyboardArrowDown } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  Height,
+  KeyboardArrowDown,
+  Save,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { fetchCategories } from "../../store/categorySlice";
+import { fetchCategories, setCategories } from "../../store/categorySlice";
 
 function CategoryManagement() {
   const user = useSelector((state) => state.auth);
@@ -67,6 +72,8 @@ function CategoryManagement() {
 
   const [viewExtras, setViewExtras] = useState(false);
   const categoryIconRef = useRef();
+  const [editCategoryFields, setEditCategoryFields] = useState(false);
+  const [editSubCategoryFields, setEditSubCategoryFields] = useState(false);
   const [addOnForm, setAddOnForm] = useState({
     type: null,
     days: "",
@@ -273,6 +280,40 @@ function CategoryManagement() {
     getCatgeories();
   }
 
+  async function updateCategoryFields() {
+    if (!selectedCategory || !selectedCategoryFields) return;
+
+    await axios.post(apis.updateCategoryFields + selectedCategory._id, {
+      fields: categoryFields.map((f) => {
+        return {
+          ...f,
+          options: f.options || ""?.split(",")?.map((item) => item.trim()),
+        };
+      }),
+    });
+    getCatgeories();
+  }
+
+  async function updateSubCategoryFields() {
+    if (!selectedSubCategory || !selectedSubCategoryFields) return;
+
+    await axios.post(
+      apis.updateSubCategoryFields +
+        selectedCategory._id +
+        "/" +
+        selectedSubCategory._id,
+      {
+        fields: subCategoryFields.map((f) => {
+          return {
+            ...f,
+            options: f.options || ""?.split(",")?.map((item) => item.trim()),
+          };
+        }),
+      }
+    );
+    getCatgeories();
+  }
+
   async function deleteSubCategoryFields() {
     const conf = window.confirm(
       "Are you sure you want to delete the selected fields?"
@@ -365,6 +406,35 @@ function CategoryManagement() {
   }
 
   function onDropCategory(ind) {
+    if (!draggedCategory) return;
+    const changeFrom = data[ind];
+    if (changeFrom._id == draggedCategory._id) return;
+    const updatedArr = data.map((item) => {
+      if (item._id == changeFrom._id) return draggedCategory;
+      if (item._id == draggedCategory._id) return changeFrom;
+      return item;
+    });
+    dispatch(setCategories(updatedArr));
+    setDraggedCategory(null);
+    changeCategoryOrder(updatedArr);
+  }
+
+  function onDropSubCategory(ind) {
+    if (!selectedCategory || !draggedSubCategory) return;
+    const changeFrom = selectedCategory?.subCategories[ind];
+    if (changeFrom._id == draggedSubCategory._id) return;
+    const updatedArr = selectedCategory?.subCategories.map((item) => {
+      if (item._id == changeFrom._id) return draggedSubCategory;
+      if (item._id == draggedSubCategory._id) return changeFrom;
+      return item;
+    });
+    setSelectedCategory((state) => {
+      return { ...state, subCategories: updatedArr };
+    });
+    setDraggedSubCategory(null);
+    changeSubCategoryOrder(updatedArr);
+  }
+  function onDropCategoryFields(ind) {
     const changeFrom = categoryFields[ind];
     if (changeFrom._id == draggedCategoryField._id) return;
     const updatedArr = categoryFields.map((item) => {
@@ -377,12 +447,12 @@ function CategoryManagement() {
     changeCategoryFieldOrder(updatedArr);
   }
 
-  function onDragCategory(e, field) {
+  function onDragCategoryFields(e, field) {
     // setCategoryFields()
     setDraggedCategoryField(field);
   }
 
-  function onDropSubCategory(ind) {
+  function onDropSubCategoryFields(ind) {
     const changeFrom = subCategoryFields[ind];
     if (changeFrom._id == draggedSubCategoryField._id) return;
 
@@ -396,7 +466,16 @@ function CategoryManagement() {
     changeSubCategoryFieldOrder(updatedArr);
   }
 
-  function onDragSubCategory(e, field) {
+  const [draggedCategory, setDraggedCategory] = useState(null);
+  const [draggedSubCategory, setDraggedSubCategory] = useState(null);
+  function onDragCategory(e, category) {
+    setDraggedCategory(category);
+  }
+  function onDragSubCategory(e, category) {
+    setDraggedSubCategory(category);
+  }
+
+  function onDragSubCategoryFields(e, field) {
     // setCategoryFields()
     setDraggedSubCategoryField(field);
   }
@@ -407,6 +486,19 @@ function CategoryManagement() {
       fields: arr,
     });
     getCatgeories();
+  }
+  async function changeCategoryOrder(arr) {
+    if (!data) return;
+    await axios.post(apis.changeCategoryOrder, {
+      categories: arr.map((c, ind) => c._id),
+    });
+  }
+
+  async function changeSubCategoryOrder(arr) {
+    if (!data) return;
+    await axios.post(apis.changeSubCategoryOrder + selectedCategory._id, {
+      subCategories: arr.map((c) => c._id),
+    });
   }
 
   async function changeSubCategoryFieldOrder(arr) {
@@ -654,9 +746,13 @@ function CategoryManagement() {
               </button>
             </div>
             <div className="tile_list">
-              {data.map((category) => (
+              {data.map((category, ind) => (
                 <>
                   <div
+                    draggable
+                    onDragStart={(e) => onDragCategory(e, category)}
+                    onDrop={() => onDropCategory(ind)}
+                    onDragOver={(e) => e.preventDefault()}
                     className={
                       "tile_item" +
                       (selectedCategory?._id == category._id ? " active" : "")
@@ -924,9 +1020,13 @@ function CategoryManagement() {
               </button>
             </div>
             <div className="tile_list">
-              {selectedCategory?.subCategories?.map((category) => (
+              {selectedCategory?.subCategories?.map((category, ind) => (
                 <>
                   <div
+                    draggable
+                    onDragStart={(e) => onDragSubCategory(e, category)}
+                    onDrop={() => onDropSubCategory(ind)}
+                    onDragOver={(e) => e.preventDefault()}
                     className={
                       "tile_item" +
                       (selectedSubCategory?._id == category._id
@@ -1197,9 +1297,36 @@ function CategoryManagement() {
                 Selected
               </div>
               <div className="actions">
-                <button className="primary">
-                  <EditOutlinedIcon /> Edit
-                </button>
+                {editCategoryFields ? (
+                  <>
+                    <button
+                      className="primary"
+                      onClick={(e) => {
+                        updateCategoryFields();
+                        // setEditCategoryFields(false);
+                      }}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="primary"
+                      onClick={(e) => {
+                        setCategoryFields(selectedCategory.fields);
+                        setEditCategoryFields(false);
+                        setSelectedCategoryFields([]);
+                      }}
+                    >
+                      Discard
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="primary"
+                    onClick={(e) => setEditCategoryFields(true)}
+                  >
+                    <EditOutlinedIcon /> Edit
+                  </button>
+                )}
                 <button
                   className="error"
                   onClick={() => {
@@ -1218,8 +1345,8 @@ function CategoryManagement() {
                     className="tile_item"
                     id={field._id}
                     draggable
-                    onDragStart={(e) => onDragCategory(e, field)}
-                    onDrop={() => onDropCategory(ind)}
+                    onDragStart={(e) => onDragCategoryFields(e, field)}
+                    onDrop={() => onDropCategoryFields(ind)}
                     onDragOver={(e) => e.preventDefault()}
                   >
                     <span>
@@ -1244,20 +1371,106 @@ function CategoryManagement() {
                                 ])
                           }
                         ></Checkbox>
-                        {field.name}
+                        {selectedCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editCategoryFields ? (
+                          <input
+                            value={field.name}
+                            onChange={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, name: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          field.name
+                        )}
                       </div>
                       <div className="type">{field.inputType}</div>
                       <div className="placeholder">
-                        {field.placeholder || "No placeholder"}
+                        {selectedCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editCategoryFields ? (
+                          <input
+                            value={field.placeholder}
+                            onChange={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, placeholder: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          field.placeholder || "No placeholder"
+                        )}
                       </div>
-                      <div
-                        className={
-                          "status " +
-                          (field.required ? "required" : "not-required")
-                        }
-                      >
-                        {field.required ? "required" : "not-required"}
-                      </div>
+                      {selectedCategoryFields?.reduce(
+                        (val, item) => (item._id == field._id ? true : val),
+                        false
+                      ) && editCategoryFields ? (
+                        <div className="select">
+                          <p>required:</p>
+                          <div
+                            className={
+                              "option " +
+                              (field.required == "true" ||
+                              field.required === true
+                                ? "active"
+                                : "")
+                            }
+                            onClick={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, required: "true" }
+                                    : f;
+                                });
+                              })
+                            }
+                          >
+                            true
+                          </div>
+                          <div
+                            className={
+                              "option " +
+                              (field.required == "false" ||
+                              field.required === false
+                                ? "active"
+                                : "")
+                            }
+                            onClick={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, required: "false" }
+                                    : f;
+                                });
+                              })
+                            }
+                          >
+                            false
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            "status " +
+                            (field.required ? "required" : "not-required")
+                          }
+                        >
+                          {field.required ? "required" : "not-required"}
+                        </div>
+                      )}
+
                       <div className="show">
                         <button
                           onClick={(e) =>
@@ -1272,20 +1485,62 @@ function CategoryManagement() {
                     </span>
                     <div className="hidden" id={"hidden" + field._id}>
                       <div className="field_extra">
-                        info: <span className="val">{field.info}</span>
+                        info:
+                        {selectedCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editCategoryFields ? (
+                          <input
+                            style={{ maxWidth: "unset", flex: 1 }}
+                            value={field.info}
+                            onChange={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, info: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          <span className="val">{field.info}</span>
+                        )}
                       </div>
                       <div className="field_extra">
                         {" "}
                         options:{" "}
-                        <span className="val">
-                          {field.options
-                            .reduce((v, i) => v + i + " , ", "")
-                            .slice(
-                              0,
-                              field.options.reduce((v, i) => v + i + " , ", "")
-                                .length - 3
-                            )}
-                        </span>
+                        {selectedCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editCategoryFields ? (
+                          <input
+                            style={{ maxWidth: "unset", flex: 1 }}
+                            value={field.options}
+                            onChange={(e) =>
+                              setCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, options: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          <span className="val">
+                            {field.options ||
+                              []
+                                ?.reduce((v, i) => v + i + " , ", "")
+                                ?.slice(
+                                  0,
+                                  field.options?.reduce(
+                                    (v, i) => v + i + " , ",
+                                    ""
+                                  )?.length - 3 || 0
+                                )}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1322,9 +1577,36 @@ function CategoryManagement() {
                 Selected
               </div>
               <div className="actions">
-                <button className="primary">
-                  <EditOutlinedIcon /> Edit
-                </button>
+                {editSubCategoryFields ? (
+                  <>
+                    <button
+                      className="primary"
+                      onClick={(e) => {
+                        updateSubCategoryFields();
+                        // setEditCategoryFields(false);
+                      }}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="primary"
+                      onClick={(e) => {
+                        setSubCategoryFields(selectedSubCategory.fields);
+                        setEditSubCategoryFields(false);
+                        setSelectedSubCategoryFields([]);
+                      }}
+                    >
+                      Discard
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="primary"
+                    onClick={(e) => setEditSubCategoryFields(true)}
+                  >
+                    <EditOutlinedIcon /> Edit
+                  </button>
+                )}
                 <button
                   className="error"
                   onClick={() => {
@@ -1342,8 +1624,8 @@ function CategoryManagement() {
                   <div
                     className="tile_item"
                     draggable
-                    onDragStart={(e) => onDragSubCategory(e, field)}
-                    onDrop={() => onDropSubCategory(ind)}
+                    onDragStart={(e) => onDragSubCategoryFields(e, field)}
+                    onDrop={() => onDropSubCategoryFields(ind)}
                     onDragOver={(e) => e.preventDefault()}
                   >
                     <span>
@@ -1370,20 +1652,105 @@ function CategoryManagement() {
                                 ])
                           }
                         ></Checkbox>
-                        {field.name}
+                        {selectedSubCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editSubCategoryFields ? (
+                          <input
+                            value={field.name}
+                            onChange={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, name: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          field.name
+                        )}
                       </div>
                       <div className="type">{field.inputType}</div>
                       <div className="placeholder">
-                        {field.placeholder || "No placeholder"}
+                        {selectedSubCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editSubCategoryFields ? (
+                          <input
+                            value={field.placeholder}
+                            onChange={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, placeholder: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          field.placeholder || "No placeholder"
+                        )}
                       </div>
-                      <div
-                        className={
-                          "status " +
-                          (field.required ? "required" : "not-required")
-                        }
-                      >
-                        {field.required ? "required" : "not-required"}
-                      </div>
+                      {selectedSubCategoryFields?.reduce(
+                        (val, item) => (item._id == field._id ? true : val),
+                        false
+                      ) && editSubCategoryFields ? (
+                        <div className="select">
+                          <p>required:</p>
+                          <div
+                            className={
+                              "option " +
+                              (field.required == "true" ||
+                              field.required === true
+                                ? "active"
+                                : "")
+                            }
+                            onClick={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, required: "true" }
+                                    : f;
+                                });
+                              })
+                            }
+                          >
+                            true
+                          </div>
+                          <div
+                            className={
+                              "option " +
+                              (field.required == "false" ||
+                              field.required === false
+                                ? "active"
+                                : "")
+                            }
+                            onClick={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, required: "false" }
+                                    : f;
+                                });
+                              })
+                            }
+                          >
+                            false
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            "status " +
+                            (field.required ? "required" : "not-required")
+                          }
+                        >
+                          {field.required ? "required" : "not-required"}
+                        </div>
+                      )}
                       <div className="show">
                         <button
                           onClick={(e) =>
@@ -1398,20 +1765,62 @@ function CategoryManagement() {
                     </span>
                     <div className="hidden" id={"hidden" + field._id}>
                       <div className="field_extra">
-                        info: <span className="val">{field.info}</span>
+                        info:{" "}
+                        {selectedSubCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editSubCategoryFields ? (
+                          <input
+                            style={{ maxWidth: "unset", flex: 1 }}
+                            value={field.info}
+                            onChange={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, info: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          <span className="val">{field.info}</span>
+                        )}
                       </div>
                       <div className="field_extra">
                         {" "}
                         options:{" "}
-                        <span className="val">
-                          {field.options
-                            .reduce((v, i) => v + i + " , ", "")
-                            .slice(
-                              0,
-                              field.options.reduce((v, i) => v + i + " , ", "")
-                                .length - 3
-                            )}
-                        </span>
+                        {selectedSubCategoryFields?.reduce(
+                          (val, item) => (item._id == field._id ? true : val),
+                          false
+                        ) && editSubCategoryFields ? (
+                          <input
+                            style={{ maxWidth: "unset", flex: 1 }}
+                            value={field.options}
+                            onChange={(e) =>
+                              setSubCategoryFields((state) => {
+                                return state.map((f) => {
+                                  return f._id == field._id
+                                    ? { ...f, options: e.target.value }
+                                    : f;
+                                });
+                              })
+                            }
+                          />
+                        ) : (
+                          <span className="val">
+                            {field.options ||
+                              []
+                                ?.reduce((v, i) => v + i + " , ", "")
+                                ?.slice(
+                                  0,
+                                  field.options?.reduce(
+                                    (v, i) => v + i + " , ",
+                                    ""
+                                  )?.length - 3 || 0
+                                )}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
