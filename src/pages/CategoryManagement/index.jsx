@@ -285,9 +285,14 @@ function CategoryManagement() {
 
     await axios.post(apis.updateCategoryFields + selectedCategory._id, {
       fields: categoryFields.map((f) => {
+        console.log(f.options.type);
+
         return {
           ...f,
-          options: f.options || ""?.split(",")?.map((item) => item.trim()),
+          options:
+            typeof f.options == "string"
+              ? f.options?.split(",")?.map((item) => item.trim())
+              : f.options,
         };
       }),
     });
@@ -306,7 +311,10 @@ function CategoryManagement() {
         fields: subCategoryFields.map((f) => {
           return {
             ...f,
-            options: f.options || ""?.split(",")?.map((item) => item.trim()),
+            options:
+              typeof f.options == "string"
+                ? f.options?.split(",")?.map((item) => item.trim())
+                : f.options,
           };
         }),
       }
@@ -1303,7 +1311,7 @@ function CategoryManagement() {
                       className="primary"
                       onClick={(e) => {
                         updateCategoryFields();
-                        // setEditCategoryFields(false);
+                        setEditCategoryFields(false);
                       }}
                     >
                       Save
@@ -1583,7 +1591,7 @@ function CategoryManagement() {
                       className="primary"
                       onClick={(e) => {
                         updateSubCategoryFields();
-                        // setEditCategoryFields(false);
+                        setEditCategoryFields(false);
                       }}
                     >
                       Save
