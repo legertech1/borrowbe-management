@@ -1591,7 +1591,7 @@ function CategoryManagement() {
                       className="primary"
                       onClick={(e) => {
                         updateSubCategoryFields();
-                        setEditCategoryFields(false);
+                        setEditSubCategoryFields(false);
                       }}
                     >
                       Save
