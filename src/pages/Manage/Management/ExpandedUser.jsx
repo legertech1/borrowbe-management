@@ -6,9 +6,11 @@ import apis from "../../../services/api";
 
 import { Button, Checkbox } from "../ManageShared";
 import useNotification from "../../../hooks/useNotification";
+import { useNavigate } from "react-router-dom";
 
 export default function ExpandedUser({ user }) {
-  console.log("user: ", user);
+  const navigate = useNavigate();
+
   const [permissions, setPermissions] = useState([]);
   const notification = useNotification();
 
@@ -86,7 +88,7 @@ export default function ExpandedUser({ user }) {
               <Button
                 className="primary"
                 onClick={() => {
-                  updatePermissions();
+                  navigate("/permissions/" + user?._id);
                 }}
               >
                 Update Permissions
@@ -110,7 +112,6 @@ export default function ExpandedUser({ user }) {
               <label>{perm}</label>
             </div>
           ))} */}
-          needs work
         </div>
       </div>
     </div>

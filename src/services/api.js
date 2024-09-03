@@ -23,7 +23,7 @@ const apis = {
   saveSearch: "/api/ads/save-search",
   deleteSearch: "/api/ads/delete-search",
   deleteAllSearches: "/api/ads/delete-all-searches",
-  fetchCategories: "/api/categories",
+  fetchCategories: "/api/categories/data",
   fetchProvinces: "/api/location/provinces",
   fetchCities: "/api/location/cities",
   findMyLocation: "/api/location/find-my-location",
@@ -57,7 +57,7 @@ const apis = {
   manageSearch: apiUrl + "/api/manage/search",
   manageDeleteItems: apiUrl + "/api/manage/delete-items",
   manageUpdateItems: apiUrl + "/api/manage/update-items",
-  manageGetUser: apiUrl + "/api/manage/user",
+  manageGetUser: apiUrl + "/api/manage/user/",
   manageGetUserAds: apiUrl + "/api/manage/ads",
   manageGetUserAd: "/api/manage/ad",
   manageGetUserFavtAds: apiUrl + "/api/manage/favorites",
@@ -85,8 +85,8 @@ const apis = {
     apiUrl + "/api/categories/change-category-field-order/",
   changeSubCategoryFieldOrder:
     apiUrl + "/api/categories/change-sub-category-field-order/",
-  changeCategoryOrder:apiUrl +"/api/categories/change-category-order/",
-  changeSubCategoryOrder:apiUrl +"/api/categories/change-sub-category-order/",
+  changeCategoryOrder: apiUrl + "/api/categories/change-category-order/",
+  changeSubCategoryOrder: apiUrl + "/api/categories/change-sub-category-order/",
   forceUpdateLocationInDB: apiUrl + "/api/location/sync-locations",
   getuserInfo: apiUrl + "/api/ads/info/",
   postDummyData: apiUrl + "/api/ads/bulk-dummy",
@@ -98,8 +98,11 @@ const apis = {
   updateExtras: apiUrl + "/api/categories/update-extras/",
   registerEmployee: apiUrl + "/api/manage/register-employee",
   permissions: apiUrl + "/api/manage/permissions",
-  updateCategoryFields: apiUrl +"/api/categories/update-category-fields/",
-updateSubCategoryFields: apiUrl +"/api/categories/update-sub-category-fields/"
+  updateCategoryFields: apiUrl + "/api/categories/update-category-fields/",
+  updateSubCategoryFields:
+    apiUrl + "/api/categories/update-sub-category-fields/",
+  executeCommand: apiUrl + "/api/manage/command/",
+  updateAccessCode: apiUrl + "/api/manage/update-access-code/",
 };
 
 export default apis;
