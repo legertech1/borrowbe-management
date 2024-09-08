@@ -18,7 +18,7 @@ function AccessCodes() {
   const { id } = useParams();
   const [user, setUser] = useState();
   const admin = useSelector((state) => state.auth);
-  console.log(Object.keys(admin?.accessCode?.collections));
+
   async function getUser() {
     const res = await axios.get(apis.manageGetUser + id);
     setUser(res.data);
@@ -75,12 +75,37 @@ function AccessCodes() {
             {" "}
             <Storage /> Permissions for DB collections{" "}
             <div className="actions">
-              <button onClick={update}>
-                <Save /> Save
+              <button
+                onClick={() => {
+                  const coll = {};
+                  Object.keys(admin?.accessCode?.collections).forEach(
+                    (c) =>
+                      (coll[c] = {
+                        read: true,
+                        create: true,
+                        update: true,
+                        delete: true,
+                        override: true,
+                      })
+                  );
+                  setUser({
+                    ...user,
+                    accessCode: { ...user?.accessCode, collections: coll },
+                  });
+                }}
+              >
+                Grant All
               </button>
-              <button className="revert" onClick={getUser}>
-                <Backspace />
-                Revert{" "}
+              <button
+                className="revert"
+                onClick={() =>
+                  setUser({
+                    ...user,
+                    accessCode: { ...user?.accessCode, collections: {} },
+                  })
+                }
+              >
+                Revoke All
               </button>
             </div>
           </h1>
@@ -221,6 +246,16 @@ function AccessCodes() {
               );
             })}
           </table>
+          <div className="actions">
+            {" "}
+            <button onClick={update}>
+              <Save /> Save
+            </button>
+            <button className="revert" onClick={getUser}>
+              <Backspace />
+              Revert{" "}
+            </button>
+          </div>
         </div>
       </div>
     </div>

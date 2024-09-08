@@ -14,6 +14,7 @@ import AdminPanel from "./pages/Manage/AdminPanel";
 import { fetchCategories } from "./store/categorySlice";
 import Terminal from "./components/Terminal";
 import AccessCodes from "./pages/AccessCodes";
+import Navbar from "./components/Navbar";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,19 +29,8 @@ function App() {
     <>
       <Terminal></Terminal>
       <div className="__app">
+        {user && <Navbar />}
         <Routes>
-          {/*<div
-      className="logout"
-      onClick={(e) => dispatch(logout())}
-      style={{
-        position: "fixed",
-        top: "5px",
-        right: "5px",
-        color: "#2196f3",
-      }}
-    >
-      logout
-    </div> */}
           {user && (
             <>
               <Route path="/" exact element={<Home />} />

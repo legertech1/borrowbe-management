@@ -545,7 +545,7 @@ function CategoryManagement() {
   return (
     <div className="category_management">
       <div className="main">
-        <div className="category_management_nav">
+        {/* <div className="category_management_nav">
           <div className="info">
             <div>
               {" "}
@@ -625,7 +625,7 @@ function CategoryManagement() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* category  category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category */}
         <div className="category">
           <div className="tile">

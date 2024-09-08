@@ -29,7 +29,7 @@ function Terminal({}) {
   async function executeCommand(comm) {
     setCommands((c) => [
       ...c,
-      { type: "command", text: comm, by: user.firstName },
+      { type: "command", text: comm, by: user?.firstName || "Anonymous user" },
     ]);
     const commandObj = {};
     const arr = comm.split(" ");
