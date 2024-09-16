@@ -106,7 +106,7 @@ const getTheseKeysOnly = (collection) => {
   let keys = {
     users: [
       "customerID",
-      "firstName",
+      { label: "Full name", path: (u) => u?.firstName + " " + u?.lastName },
       "email",
       "createdAt",
       "accountLocked",
