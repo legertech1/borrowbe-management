@@ -11,8 +11,8 @@
 }
 
 .global_mangement .main {
-  width: 85%;
-  padding: 20px;
+  width: 90%;
+
   margin: 0 auto;
   margin-top: 20px;
 }
@@ -28,12 +28,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
-}
-
-.global_mangement .filter_section {
-  padding: 20px 15px;
-  background-color: white;
-  border-radius: 4px;
 }
 
 .global_mangement .row {
@@ -74,7 +68,9 @@
 }
 
 .global_mangement .box4 {
-  width: 5%;
+  height: 50px;
+  width: 50px;
+  background-color: var(--red);
 }
 
 .global_mangement .btns_cont {
@@ -85,29 +81,26 @@
   margin-left: 20px;
 }
 
-
-
 .global_mangement .table_cont {
-  overflow: scroll;
+  /* overflow: scroll; */
   width: 100%;
   margin-top: 20px;
 }
 
-
 .global_mangement .qty_label {
   font-size: 14px;
 }
-.global_mangement .qty_cont{
+.global_mangement .qty_cont {
   text-align: right;
   font-size: 14px;
 }
 .global_mangement .qty_cont .flex {
-    display: flex;
-    justify-content: end;
-    gap:5px;
-    justify-items: center;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
 .global_mangement .qty_cont input {
   /* width: 200px; */
@@ -116,10 +109,47 @@
 
 .global_mangement .input_cont {
   position: relative;
-
 }
 
 .global_mangement .max_show {
   position: absolute;
+}
+.global_mangement .filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px #1114;
+}
+.global_mangement .row.actions {
+  padding: 20px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px #1114;
+  display: flex;
+  margin-top: 20px;
+  justify-content: start;
+}
+.global_mangement .row.actions button {
+  padding: 16px;
+  box-sizing: border-box;
+  height: 46px;
+  font-weight: 500;
+}
+.global_mangement .num_results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  font-size: 17px;
+  font-weight: 500;
+  gap: 12px;
+}
 
+.global_mangement .num_results input {
+  font-size: 18px;
+  font-weight: 600;
+  height: 46px;
 }

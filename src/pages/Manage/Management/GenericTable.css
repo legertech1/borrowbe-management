@@ -1,16 +1,18 @@
 /* GenericTable.css */
 
 .generic_table_container {
-  max-height: 800px; /* Adjust the max height as needed */
+  max-height: 800px;
   overflow-y: auto;
   position: relative;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px #1114;
 }
 
 .generic_table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 15px;
   background-color: white;
 }
 
@@ -26,11 +28,13 @@
 
 .generic_table th,
 .generic_table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 15px;
+
   text-align: left;
 }
-
+.generic_table th {
+  font-size: 16px;
+}
 .generic_table .title_cont {
   display: inline;
 }
@@ -41,36 +45,47 @@
 }
 .generic_table .th_cont {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
+  gap: 6px;
+  min-width: fit-content;
 }
-
-
-
+.generic_table .switch_cell > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.generic_table td.title {
+  padding: 15px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: min(400px, 20vw);
+  overflow: hidden;
+}
 .generic_table .active_icon {
   color: var(--blue);
 }
-
 
 .generic_table .down_arrow {
   margin-top: -10px;
 }
 
 .generic_table th {
-  background-color: #6c757d;
-  font-weight: bold;
+  background-color: var(--blue);
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .generic_table .table_row {
   cursor: pointer;
 }
 
-.generic_table tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
+.generic_table tr:nth-child(even) {
+  background-color: #2196f318;
 }
 
 .generic_table tbody tr:hover {
@@ -79,10 +94,6 @@
 
 .generic_table .expanded_tr {
   background-color: white !important;
-}
-.generic_table .expanded_cont {
-  display: flex;
-  padding: 20px;
 }
 
 .table_cont .top_bar {
@@ -138,10 +149,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
- 
 }
-
-
 
 .table_cont .expand_icon {
   font-size: 26px;
@@ -151,4 +159,28 @@
 .table_cont .eye_icon {
   font-size: 26px;
   cursor: pointer;
+}
+.generic_table td.action {
+  color: var(--blue);
+  text-align: center;
+  height: 100%;
+}
+.generic_table .icons_cont svg {
+  height: 20px;
+  width: 20px;
+}
+.generic_table::-webkit-scrollbar {
+  width: 7px;
+  display: block !important;
+  border-radius: 4px;
+}
+
+.generic_table::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.generic_table::-webkit-scrollbar-thumb {
+  background-color: var(--blue);
+  border-radius: 4px;
 }

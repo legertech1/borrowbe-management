@@ -110,7 +110,7 @@ const getTheseKeysOnly = (collection) => {
       "email",
       "createdAt",
       "accountLocked",
-      "accountType",
+      { label: "Ads", path: (u) => u?.data?.postedAds?.total },
     ],
 
     ads: [
@@ -181,9 +181,9 @@ export const prepareSearchesData = (data) => {
     const row = {
       query,
       category,
-      minPrice: filters.minPrice,
-      maxPrice: filters.maxPrice,
-      term: filters.term,
+      minPrice: filters?.minPrice,
+      maxPrice: filters?.maxPrice,
+      term: filters?.term,
     };
 
     Object.keys(row).forEach((key) => {
@@ -217,22 +217,14 @@ export const collections = [
     label: "Users",
     key: COLLECTIONS_NAMES.USER,
     keys: userKeys,
+    sort: "customerID",
   },
   {
     label: "Ads",
     key: COLLECTIONS_NAMES.AD,
     keys: adKeys,
+    sort: "listingID",
   },
-  // {
-  //   label: "Deleted Users",
-  //   key: COLLECTIONS_NAMES.DELETED_USER,
-  //   keys: userKeys,
-  // },
-  // {
-  //   label: "Deleted Ads",
-  //   key: COLLECTIONS_NAMES.DELETED_AD,
-  //   keys: adKeys,
-  // },
 ];
 
 export const allKeys = collections.reduce((acc, collection) => {

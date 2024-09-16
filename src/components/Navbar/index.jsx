@@ -7,33 +7,56 @@ import WindowSharpIcon from "@mui/icons-material/WindowSharp";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Logout } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import apis from "../../services/api";
 function Navbar() {
   const user = useSelector((state) => state.auth);
+  const pages = user?.accessCode?.pages || {};
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   return (
     <div className="_navbar">
-      <img src={LOGO} alt="" className="logo" />
+      <img src={LOGO} alt="" className="logo" onClick={() => navigate("/")} />
       <div className="nav">
-        <li onClick={() => navigate("/users")}>
-          <PersonIcon />
-          users
-        </li>
-        <li onClick={() => navigate("/categories")}>
-          <CategoryIcon />
-          Categories
-        </li>
-        <li>
-          <WindowSharpIcon />
-          Ads
-        </li>
-        <li>
-          {" "}
-          <DashboardIcon />
-          Dashboard
-        </li>
+        {pages["Users"] && (
+          <li
+            className={
+              pathname.includes("users") || pathname.includes("permissions")
+                ? "active"
+                : ""
+            }
+            onClick={() => navigate("/users")}
+          >
+            <PersonIcon />
+            users
+          </li>
+        )}
+        {pages["Categories"] && (
+          <li
+            className={pathname.includes("categories") ? "active" : ""}
+            onClick={() => navigate("/categories")}
+          >
+            <CategoryIcon />
+            Categories
+          </li>
+        )}
+        {pages["Ads"] && (
+          <li
+            className={pathname.includes("ads") ? "active" : ""}
+            onClick={() => navigate("/ads")}
+          >
+            <WindowSharpIcon />
+            Ads
+          </li>
+        )}
+        {pages["Dashboard"] && (
+          <li className={pathname.includes("dashboard") ? "active" : ""}>
+            {" "}
+            <DashboardIcon />
+            Dashboard
+          </li>
+        )}
         <li
           className="logout"
           onClick={async () => {

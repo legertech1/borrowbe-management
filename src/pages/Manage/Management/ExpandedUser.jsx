@@ -4,9 +4,9 @@ import "./ExpandedUser.css";
 import axios from "axios";
 import apis from "../../../services/api";
 
-import { Button, Checkbox } from "../ManageShared";
 import useNotification from "../../../hooks/useNotification";
 import { useNavigate } from "react-router-dom";
+import Button from "../../../components/Shared/Button";
 
 export default function ExpandedUser({ user }) {
   const navigate = useNavigate();
@@ -39,80 +39,28 @@ export default function ExpandedUser({ user }) {
 
   return (
     <div className="expand-page">
-      <div>
-        <div className="expanded-user-details">
-          <div className="user-address">
-            <h2>User Address</h2>
-            <div className="user-detail">
-              <p>
-                <strong>Address:</strong> {user?.info?.address}
-              </p>
-              <p>
-                <strong>City:</strong> {user?.info?.city}
-              </p>
-              <p>
-                <strong>Province:</strong> {user?.info?.province}
-              </p>
-              <p>
-                <strong>Postal Code:</strong> {user?.info?.postalCode}
-              </p>
-            </div>
-          </div>
-          <div className="user-other-details">
-            <h2>Other Details</h2>
-            <div className="user-detail">
-              <p>
-                <strong>Verified:</strong> {user.verified ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Account Locked:</strong>{" "}
-                {user.accountLocked ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Ads Count:</strong> {user.userAdsCount}
-              </p>
-              <p>
-                <strong>User ID:</strong> {user._id}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="user-other-details">
-        <div className="perms-header">
-          <div>
-            <h2>Permissions</h2>
-          </div>
-          {
-            <div>
-              <Button
-                className="primary"
-                onClick={() => {
-                  navigate("/permissions/" + user?._id);
-                }}
-              >
-                Update Permissions
-              </Button>
-            </div>
-          }
-        </div>
-        <div className="perm_cont">
-          {/* {ALL_PERMISSIONS_ARRAY.map((perm) => (
-            <div className="perm_item" key={perm}>
-              <Checkbox
-                checked={permissions.includes(perm)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setPermissions([...permissions, perm]);
-                  } else {
-                    setPermissions(permissions.filter((p) => p !== perm));
-                  }
-                }}
-              />
-              <label>{perm}</label>
-            </div>
-          ))} */}
-        </div>
+      <div className="more_info">
+        <p>
+          UID: <span>{user?._id}</span>
+        </p>
+        <p>
+          Phone: <span>{user?.info?.phone}</span>
+        </p>
+        <p>
+          City: <span>{user?.info?.city}</span>
+        </p>
+        <p>
+          Province: <span> {user?.info?.province}</span>
+        </p>
+        <p>
+          Account Verified: <span>{user?.verified ? "true" : "false"}</span>{" "}
+        </p>
+        <p>
+          Authentication Risk : <span>{user?.authenticationRisk}</span>
+        </p>
+        <Button onClick={() => navigate("/permissions/" + user?._id)}>
+          Update Permissions
+        </Button>
       </div>
     </div>
   );

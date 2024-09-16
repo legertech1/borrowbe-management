@@ -12,7 +12,6 @@ function Manage() {
     setUsers((await axios.get(apis.manage)).data);
   }
   async function searchUsers() {
-    console.log(users);
     if (!search) return setSearched([]);
     let arr = [];
     users.forEach((user) => {
@@ -36,10 +35,6 @@ function Manage() {
 
   return (
     <div className="Management" style={{ margin: "20px" }}>
-      <p>
-        <Link to="/">Back to home </Link>
-      </p>
-
       <table border="1" style={{ textAlign: "left" }}>
         <tr>
           <th>

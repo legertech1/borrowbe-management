@@ -9,14 +9,14 @@ export default function Button({
 }) {
   return (
     <button
-      className={`${className} ${disabled ? "disabled_btn" : ""}`}
+      className={`_btn_core ${className} ${disabled ? "disabled_btn" : ""}`}
       onClick={() => {
         if (disabled) return;
         onClick && onClick();
       }}
       disabled={disabled || false}
     >
-      {children}
+      <span> {children}</span>
     </button>
   );
 }

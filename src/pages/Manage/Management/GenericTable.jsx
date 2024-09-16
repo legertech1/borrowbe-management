@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import {
   COLLECTIONS_NAMES,
   convertToReadableKey,
@@ -9,10 +8,11 @@ import {
 } from "./manageConfig";
 import { Button, Switch } from "../ManageShared";
 import "./GenericTable.css";
-
+import Checkbox from "../../../components/Shared/Checkbox";
 import useNotification from "../../../hooks/useNotification";
 import ExpanededRow from "./ExpanededRow";
 import TablePagination from "./TablePagination";
+import { ArrowDownward, ArrowUpward, Visibility } from "@mui/icons-material";
 
 function GenericTable({
   columns,
@@ -25,6 +25,7 @@ function GenericTable({
   expand,
   hideAction,
   multiple,
+  curr,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
@@ -32,7 +33,7 @@ function GenericTable({
   const [lastClickTime, setLastClickTime] = useState(0);
   const [rows, setRows] = useState([]);
   const [sortOrder, setSortOrder] = useState({
-    column: null,
+    column: curr?.sort || "",
     direction: "asc",
   });
 
@@ -57,6 +58,44 @@ function GenericTable({
       setSelectedRows([...selectedRows, row]);
     }
   };
+  const handleSort = (columnName) => {
+    console.log("sort", data);
+    const isAsc =
+      sortOrder.column === columnName && sortOrder.direction === "asc";
+    const direction = isAsc ? "desc" : "asc";
+
+    const sorted = [...data].sort((a, b) => {
+      if (typeof a[columnName] === "boolean") {
+        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
+      }
+      if (typeof a[columnName] === "number") {
+        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
+      }
+      if (a[columnName] === "true" || a[columnName] === "false") {
+        return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
+      }
+
+      if (!a[columnName] && !b[columnName]) {
+        return 0;
+      }
+      if (!a[columnName] && b[columnName]) {
+        return 1;
+      }
+      if (a[columnName] && !b[columnName]) {
+        return -1;
+      }
+
+      return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
+    });
+
+    setRows(sorted);
+
+    // setSortOrder({ column: columnName, direction });
+  };
+  useEffect(() => {
+    if (!data) return;
+    handleSort(sortOrder.column);
+  }, [sortOrder, data]);
 
   const handleSelectAll = () => {
     if (selectedRows.length === rows.length) {
@@ -91,6 +130,8 @@ function GenericTable({
   };
 
   const openDetails = (id) => {
+    console.log(id);
+
     if (currentCollection === COLLECTIONS_NAMES.USER) {
       window.open(`/user/${id}`, "_blank");
     } else if (currentCollection === COLLECTIONS_NAMES.AD) {
@@ -128,43 +169,7 @@ function GenericTable({
             Delete {selectedRows.length}{" "}
             {selectedRows.length === 1 ? singleName : pluralName}
           </Button>
-
-          {/* <Button
-            className="secondary"
-            onClick={() => {
-              
-              // updateItems && deleteItems(selectedRows);
-              // setSelectedRows([]);
-            }}
-          >
-            Block {selectedRows.length}{" "}
-            {selectedRows.length === 1 ? singleName : pluralName}
-          </Button> */}
-          {/* <Button
-            className="error"
-            onClick={() => {
-              deleteItems && deleteItems(selectedRows);
-              setSelectedRows([]);
-            }}
-          >
-            Set Active {selectedRows.length}{" "}
-            {selectedRows.length === 1 ? singleName : pluralName}
-          </Button> */}
         </div>
-        {/* <div className="top_bar_right_item">
-          <Button
-            className="error"
-            onClick={() => {
-              updateItems(selectedRows, {
-                accountLocked: true,
-              });
-              setSelectedRows([]);
-            }}
-          >
-            Lock {selectedRows.length}{" "}
-            {selectedRows.length === 1 ? singleName : pluralName}
-          </Button>
-        </div> */}
       </div>
     </div>
   );
@@ -174,40 +179,34 @@ function GenericTable({
       <tr>
         {multiple && (
           <th>
-            <input
-              type="checkbox"
+            <Checkbox
               checked={selectedRows.length === rows.length}
-              onChange={handleSelectAll}
+              setChecked={handleSelectAll}
             />
           </th>
         )}
         {columns.map((column, index) => (
-          <th onClick={() => handleSort(column)} key={index}>
+          <th
+            onClick={() =>
+              setSortOrder({
+                column,
+                direction: sortOrder.direction == "asc" ? "desc" : "asc",
+              })
+            }
+            key={index}
+          >
             <div className="th_cont">
-              <div className="title_cont">{convertToReadableKey(column)}</div>
-              <div className="icons_cont" onClick={() => handleSort(column)}>
-                <KeyboardArrowUpIcon
-                  className={`${
-                    sortOrder.column === column &&
-                    sortOrder.direction === "asc" &&
-                    "active_icon"
-                  }`}
-                  fontSize="small"
-                />
-                <KeyboardArrowDownIcon
-                  className={`down_arrow ${
-                    sortOrder.column === column &&
-                    sortOrder.direction === "desc" &&
-                    "active_icon"
-                  }`}
-                  fontSize="small"
-                />
+              {convertToReadableKey(column.label || column)}
+              <div className="icons_cont">
+                {sortOrder.column === column &&
+                  sortOrder.direction === "asc" && <ArrowUpward />}
+                {sortOrder.column === column &&
+                  sortOrder.direction === "desc" && <ArrowDownward />}
+                {sortOrder.column !== column && (
+                  <ArrowDownward style={{ opacity: 0 }} />
+                )}
               </div>
             </div>
-            {/* {sortOrder.column === column && sortOrder.direction === "asc" && (
-            )}
-            {sortOrder.column === column && sortOrder.direction === "desc" && (
-            )} */}
           </th>
         ))}
 
@@ -286,10 +285,9 @@ function GenericTable({
         <tr className="table_row" key={rowIndex}>
           {multiple && (
             <td>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={selectedRows.includes(row._id)}
-                onChange={() => handleRowSelect(row._id)}
+                setChecked={() => handleRowSelect(row._id)}
               />
             </td>
           )}
@@ -321,28 +319,35 @@ function GenericTable({
 
             if (switchFields.includes(column)) {
               return (
-                <td key={columnIndex}>
-                  <Switch
-                    onChange={(e) => {
-                      // e.stopPropagation();
+                <td key={columnIndex} className={"switch_cell " + column}>
+                  <span>
+                    {" "}
+                    <Switch
+                      onChange={(e) => {
+                        // e.stopPropagation();
 
-                      handleSwitchChange(row, column);
-                    }}
-                    checked={isChecked(row[column])}
-                  />
-                  {column === "status" && <span>{` ${row[column]}`}</span>}
+                        handleSwitchChange(row, column);
+                      }}
+                      checked={isChecked(row[column])}
+                    />
+                    {column === "status" && <span>{` ${row[column]}`}</span>}
+                  </span>
                 </td>
               );
             }
             return (
-              <td onClick={(e) => handleRowClick(row._id, e)} key={columnIndex}>
-                {row[column] || ""}
+              <td
+                onClick={(e) => handleRowClick(row._id, e)}
+                key={columnIndex}
+                className={column}
+              >
+                {column.path ? column.path(row) : row[column] || ""}
               </td>
             );
           })}
           {!hideAction && (
-            <td>
-              <RemoveRedEyeOutlinedIcon
+            <td className="action">
+              <Visibility
                 className="eye_icon"
                 onClick={() => openDetails(row._id)}
               />
@@ -375,39 +380,6 @@ function GenericTable({
   if (!rows.length || !columns.length) {
     return null;
   }
-
-  const handleSort = (columnName) => {
-    const isAsc =
-      sortOrder.column === columnName && sortOrder.direction === "asc";
-    const direction = isAsc ? "desc" : "asc";
-
-    const sorted = [...rows].sort((a, b) => {
-      if (typeof a[columnName] === "boolean") {
-        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
-      }
-      if (typeof a[columnName] === "number") {
-        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
-      }
-      if (a[columnName] === "true" || a[columnName] === "false") {
-        return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
-      }
-
-      if (!a[columnName] && !b[columnName]) {
-        return 0;
-      }
-      if (!a[columnName] && b[columnName]) {
-        return 1;
-      }
-      if (a[columnName] && !b[columnName]) {
-        return -1;
-      }
-
-      return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
-    });
-
-    setRows(sorted);
-    setSortOrder({ column: columnName, direction });
-  };
 
   return (
     <>

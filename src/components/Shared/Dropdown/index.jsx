@@ -28,8 +28,8 @@ function Dropdown({
     function handleOutsideClick(event) {
       if (
         isOpen &&
-        !options.current.contains(event.target) &&
-        !dropdownButton.current.contains(event.target)
+        !options.current?.contains(event.target) &&
+        !dropdownButton.current?.contains(event.target)
       ) {
         closeDropdown();
       }
@@ -90,16 +90,18 @@ function Dropdown({
           <Arrow></Arrow>
         </div>
       </div>
-      <div className={`options ${isOpen ? "active" : ""}`} ref={options}>
-        {array &&
-          array.map((item, index) => (
-            <React.Fragment key={index}>
-              <Option value={item} index={index} />
-              <hr />
-            </React.Fragment>
-          ))}
-        {(!array && error) || ""}
-      </div>
+      {Boolean(array?.length) && (
+        <div className={`options ${isOpen ? "active" : ""}`} ref={options}>
+          {array &&
+            array.map((item, index) => (
+              <React.Fragment key={index}>
+                <Option value={item} index={index} />
+                <hr />
+              </React.Fragment>
+            ))}
+          {(!array && error) || ""}
+        </div>
+      )}
     </div>
   );
 }

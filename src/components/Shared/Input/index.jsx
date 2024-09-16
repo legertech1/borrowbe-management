@@ -13,6 +13,8 @@ export default function Input({
   onKeyDown,
   defaultValue,
   maxLength,
+  min,
+  max,
 }) {
   const [show, setShow] = React.useState(false);
   return (
@@ -28,6 +30,8 @@ export default function Input({
         onKeyDown={onKeyDown || null}
         defaultValue={defaultValue || ""}
         maxLength={maxLength}
+        min={min}
+        max={max}
       />
       {type === "password" && (
         <>

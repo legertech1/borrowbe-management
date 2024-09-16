@@ -10,16 +10,17 @@ import CategoryManagement from "./pages/CategoryManagement";
 import Management from "./pages/Manage/Management/Management";
 import UserDetails from "./pages/Manage/UserDetails";
 import AdDetails from "./pages/Manage/AdDetails";
-import AdminPanel from "./pages/Manage/AdminPanel";
+
 import { fetchCategories } from "./store/categorySlice";
 import Terminal from "./components/Terminal";
 import AccessCodes from "./pages/AccessCodes";
 import Navbar from "./components/Navbar";
+import { collections } from "./pages/Manage/Management/manageConfig";
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
-
+  const pages = user?.accessCode?.pages || {};
   useEffect(() => {
     dispatch(me());
     dispatch(fetchCategories());
@@ -34,17 +35,43 @@ function App() {
           {user && (
             <>
               <Route path="/" exact element={<Home />} />
-              <Route path="/ads" exact element={<Home />} />
-              <Route
-                path="/categories"
-                exact
-                element={<CategoryManagement />}
-              />
-              <Route path="/dashboard" exact element={<Home />} />
-              <Route path="/users" exact element={<Management />} />
-              <Route path="/user/:id" exact element={<UserDetails />} />
-              <Route path="/ad/:id" exact element={<AdDetails />} />
-              <Route path="/permissions/:id" exact element={<AccessCodes />} />
+              {pages["Ads"] && (
+                <Route
+                  path="/ads"
+                  element={<Management currentCollection={collections[1]} />}
+                />
+              )}
+              {pages["Categories"] && (
+                <Route
+                  path="/categories"
+                  exact
+                  element={<CategoryManagement />}
+                />
+              )}
+              {pages["Dashboard"] && (
+                <Route path="/dashboard" exact element={<Home />} />
+              )}
+              {pages["Users"] && (
+                <Route
+                  path="/users"
+                  exact
+                  element={<Management currentCollection={collections[0]} />}
+                />
+              )}
+              {pages["UserDetails"] && (
+                <Route path="/user/:id" exact element={<UserDetails />} />
+              )}
+              {pages["AdDetails"] && (
+                <Route path="/ad/:id" exact element={<AdDetails />} />
+              )}
+
+              {pages["Permissions"] && (
+                <Route
+                  path="/permissions/:id"
+                  exact
+                  element={<AccessCodes />}
+                />
+              )}
             </>
           )}
           {!user && <Route path="/" exact element={<Login />} />}\

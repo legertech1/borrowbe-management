@@ -25,6 +25,7 @@ body {
   margin: 0;
   /* background-color: var(--bg); */
   font-family: var(--font2);
+  /* background-image: url(../src/assets/images/ssspot.svg); */
 }
 
 a {
@@ -111,6 +112,7 @@ body::-webkit-scrollbar {
   width: 100%;
   top: 0;
   left: 0;
+  /* background-image: url(../src/assets/images/ssspot.svg); */
   /* background-color: var(--bg); */
 }
 

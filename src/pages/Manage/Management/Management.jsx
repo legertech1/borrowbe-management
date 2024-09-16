@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import axios from "axios";
 import Dropdown from "../../../components/Shared/Dropdown";
-// import Input from "../../../components/Shared/Input";
-// import Button from "../../../components/Shared/Button";
+import Input from "../../../components/Shared/Input";
+import Button from "../../../components/Shared/Button";
 import apis from "../../../services/api";
 import "./Management.css";
 import {
@@ -15,13 +15,14 @@ import {
   prepareDataForTable,
 } from "./manageConfig";
 import GenericTable from "./GenericTable";
-import { Select, Input, Button } from "../ManageShared";
+
 import { Link } from "react-router-dom";
 import Modal from "../../../components/Modal";
 import AddUserForm from "../AddUserForm/index";
 import { useSelector } from "react-redux";
+import { Add, ClearAll, Search } from "@mui/icons-material";
 
-function UserManagement() {
+function UserManagement({ currentCollection }) {
   const [filters, setFilters] = useState([]);
 
   const [showAddUserModal, setShowAddUserModal] = useState(false);
@@ -37,44 +38,14 @@ function UserManagement() {
     currentPage: 1,
   });
 
-  const [currentCollection, setCurrentCollection] = useState({
-    label: "",
-    key: "",
-  });
-
   const setInitialFilters = () => {
-    if (
-      currentCollection.key === COLLECTIONS_NAMES.USER ||
-      currentCollection.key === COLLECTIONS_NAMES.DELETED_USER
-    ) {
-      setFilters([
-        {
-          label: allKeys[collections[0].key][0].label,
-          condition: conditions[0].label,
-          value: "",
-        },
-        {
-          label: allKeys[collections[0].key][1].label,
-          condition: conditions[0].label,
-          value: "",
-        },
-        {
-          label: allKeys[collections[0].key][2].label,
-          condition: conditions[0].label,
-          value: "",
-        },
-        {
-          label: allKeys[collections[0].key][3].label,
-          condition: conditions[0].label,
-          value: "",
-        },
-        // {
-        //   label: allKeys[collections[0].key][4].label,
-        //   condition: conditions[0].label,
-        //   value: "",
-        // },
-      ]);
-    }
+    setFilters([
+      {
+        label: allKeys[currentCollection.key][0].label,
+        condition: currentCollection.label,
+        value: "",
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -83,33 +54,6 @@ function UserManagement() {
       handleSearch();
     }
   }, [currentCollection.key]);
-
-  useEffect(() => {
-    setCurrentCollection(collections[0]);
-  }, []);
-
-  const handleSetCollection = (name) => {
-    name = name || currentCollection.label;
-
-    const collection = collections.find((item) => item.label === name);
-
-    setCurrentCollection(collection);
-    if (
-      collection.key === COLLECTIONS_NAMES.USER ||
-      collection.key === COLLECTIONS_NAMES.DELETED_USER
-    ) {
-      setInitialFilters();
-    } else {
-      setFilters([
-        {
-          label: allKeys[collection.key][0].label,
-          condition: conditions[0].label,
-          value: "",
-        },
-      ]);
-    }
-    reset();
-  };
 
   const reset = () => {
     setRows([]);
@@ -190,14 +134,6 @@ function UserManagement() {
 
   const handleSearch = async (newPage = 1, filters) => {
     try {
-      // Clear the table
-      // setRows([]);
-      // setColumns([]);
-      // setPagination({
-      //   totalResults: 0,
-      //   totalPages: 1,
-      //   currentPage: newPage,
-      // });
       setLoading(true);
 
       const filterQuery = prepareFilters(filters);
@@ -281,128 +217,83 @@ function UserManagement() {
   return (
     <div className="global_mangement">
       <div className="main">
-        <div className="header_row">
-          <div>
-            <Link to="/">Back to home</Link>
-          </div>
-          <div>
-            <p>
-              User: {user?.email} ({user?.accountType})
-            </p>
-          </div>
-          <div>
-            Select Collection:
-            <Select
-              value={currentCollection.label}
-              onChange={(e) => handleSetCollection(e.target.value)}
-              placeholder="Select Collection"
-              style={{ width: "200px", marginLeft: "10px" }}
-            >
-              {collections.map((collection) => (
-                <option key={collection.key} value={collection.label}>
-                  {collection.label}
-                </option>
-              ))}
-            </Select>
-          </div>
-        </div>
-
         {currentCollection.key && (
           <div className="filter_section">
-            {filters.length > 0 &&
-              filters.map((filter, index) => (
-                <div className="row" key={index}>
-                  <div className="box1">
-                    <Select
-                      value={filter.label}
-                      onChange={(e) => setFieldKey(index, e.target.value)}
-                      placeholder="Select Filter"
+            <div className="filters">
+              {filters.length > 0 &&
+                filters.map((filter, index) => (
+                  <div className="row" key={index}>
+                    <div className="box1">
+                      <Dropdown
+                        value={filter.label}
+                        setValue={(v) => setFieldKey(index, v)}
+                        placeholder="Select Filter"
+                        array={allKeys[currentCollection.key].map((k, i) => ({
+                          text: k.label,
+                          value: k.key,
+                        }))}
+                      ></Dropdown>
+                    </div>
+                    <div className="box2">
+                      <Dropdown
+                        value={filter.condition}
+                        setValue={(v) => setCondition(index, v)}
+                        placeholder="Select Condition"
+                        array={conditions.map((condition) => ({
+                          text: condition.label,
+                          value: condition.key,
+                        }))}
+                      ></Dropdown>
+                    </div>
+                    <div className="box3">
+                      <Input
+                        value={filter.value}
+                        onChange={(e) => setInput(index, e.target.value)}
+                        placeholder="Enter Value"
+                        onKeyDown={handleEnterPress}
+                      ></Input>
+                    </div>
+                    <Button
+                      className="box4"
+                      onClick={() => removeFilter(index)}
                     >
-                      {allKeys[currentCollection.key].map((k, i) => (
-                        <option key={k.label + i} value={k.label}>
-                          {k.label}
-                        </option>
-                      ))}
-                    </Select>
+                      <DeleteOutlineOutlinedIcon></DeleteOutlineOutlinedIcon>
+                    </Button>
                   </div>
-                  <div className="box2">
-                    <Select
-                      value={filter.condition}
-                      onChange={(e) => setCondition(index, e.target.value)}
-                      placeholder="Select Condition"
-                    >
-                      {conditions.map((condition) => (
-                        <option value={condition.label} key={condition.key}>
-                          {condition.label}
-                        </option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className="box3">
-                    <Input
-                      value={filter.value}
-                      onChange={(e) => setInput(index, e.target.value)}
-                      placeholder="Enter Value"
-                      onKeyDown={handleEnterPress}
-                    ></Input>
-                  </div>
-                  <div className="box4" onClick={() => removeFilter(index)}>
-                    <DeleteOutlineOutlinedIcon></DeleteOutlineOutlinedIcon>
-                  </div>
-                </div>
-              ))}
-            <div className="row">
-              <div className="box1">
-                <Button onClick={handleSearch} className="primary">
-                  Search
-                </Button>
-
-                <Button onClick={handleClearAll} className="error">
-                  Clear All
-                </Button>
-              </div>
-              <div className="box2">
-                <Button onClick={addNewFilterRow} className="secondary">
-                  Add New Filter
-                </Button>
+                ))}
+            </div>
+            <div className="row actions">
+              <Button onClick={handleSearch} className="primary">
+                <Search /> Search
+              </Button>
+              <Button onClick={handleClearAll} className="error">
+                <ClearAll />
+                Clear All
+              </Button>
+              <Button onClick={addNewFilterRow} className="secondary">
+                <Add />
+                Add New Filter
+              </Button>
+              {currentCollection.label == "Users" && (
                 <Button
                   onClick={() => {
                     setShowAddUserModal(true);
                   }}
                   className="primary"
                 >
-                  Add User
+                  <Add /> Add User
                 </Button>
-                {/* <Button onClick={updateLocations} className="error">
-                    Update Locations (Dangerous)
-                  </Button> */}
-                {/* <Button onClick={addDummyAds} className="error">
-                    Add Dummy Ads
-                  </Button> */}
+              )}
+              <div className="num_results">
+                Number of Results:{" "}
+                <Input
+                  value={qty}
+                  onChange={(e) => {
+                    if (isNaN(e.target.value)) return;
+                    setQty(Math.min(500, e.target.value));
+                  }}
+                />
               </div>
-              <div className="box3 qty_cont">
-                <div className="flex">
-                  <label className="qty_label">Max Number of Results:</label>
-                  <Input
-                    value={qty}
-                    onChange={(e) => {
-                      let val = e.target.value;
-                      if (isNaN(val)) return;
-                      if (val < 0) return;
-                      if (val > 10000) return;
-
-                      setQty(val);
-                    }}
-                    placeholder="Enter Value"
-                    onKeyDown={handleEnterPress}
-                    type="number"
-                  ></Input>
-                </div>
-                <span>
-                  Showing {rows.length} of {pagination.totalResults}{" "}
-                </span>
-              </div>
-              <div className="box4"></div>
             </div>
           </div>
         )}
@@ -418,6 +309,7 @@ function UserManagement() {
               pagination={pagination}
               onPageChange={handlePageChange}
               currentCollection={currentCollection.key}
+              curr={currentCollection}
               deleteItems={deleteItems}
               updateItems={updateItems}
             />

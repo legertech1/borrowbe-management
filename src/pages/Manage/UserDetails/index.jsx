@@ -37,7 +37,7 @@ const UserDetails = () => {
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(apis.manageGetUser + "/" + params.id);
+      const response = await axios.get(apis.manageGetUser + params.id);
       setUser(response.data);
       setLoading(false);
     } catch (error) {
@@ -184,9 +184,6 @@ const UserDetails = () => {
   return (
     <div className="manage_profile">
       <div className="user_profile">
-        <div>
-          <Link to="/n">Back to home</Link>
-        </div>
         <GenericCard
           hide={true}
           title={`Customer : ${user.firstName} ${user.lastName} / ${user.email} / ${user._id}`}

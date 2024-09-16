@@ -40,20 +40,25 @@ function AccessCodes() {
     <div className="AccessCodes">
       <div className="right">
         <div className="user_info">
-          <h1>
-            <Person />
-            User Info
-          </h1>
           <div>
-            <h4>
-              User ID: <span>{user?._id}</span>
-            </h4>
-            <h4>
-              Customer ID: <span>{user?.customerID}</span>
-            </h4>
-            <h4>
-              Full Name: <span>{user?.firstName + " " + user?.lastName}</span>
-            </h4>
+            <img src={user?.image} alt="" />
+            <div className="_inf">
+              {" "}
+              <h4>
+                <span>{user?.firstName + " " + user?.lastName}</span>
+              </h4>
+              <p>{user?.email}</p>
+            </div>
+          </div>
+          <div className="actions">
+            {" "}
+            <button onClick={update}>
+              <Save /> Save
+            </button>
+            <button className="revert" onClick={getUser}>
+              <Backspace />
+              Revert{" "}
+            </button>
           </div>
         </div>
 
@@ -61,6 +66,30 @@ function AccessCodes() {
           <h1>
             <Layers /> Permissions for Pages
           </h1>
+          <ul>
+            {Object.keys(admin?.accessCode?.pages).map((p) => (
+              <h3>
+                {p}{" "}
+                <Switch
+                  checked={(user?.accessCode?.pages || {})[p]}
+                  onChange={(e) => {
+                    setUser((user) => {
+                      return {
+                        ...user,
+                        accessCode: {
+                          ...(user?.accessCode || {}),
+                          pages: {
+                            ...(user?.accessCode?.pages || {}),
+                            [p]: e.target.checked,
+                          },
+                        },
+                      };
+                    });
+                  }}
+                />{" "}
+              </h3>
+            ))}
+          </ul>
         </div>
         <div className="commands">
           <h1>
@@ -112,11 +141,11 @@ function AccessCodes() {
           <table className="collections">
             <tr>
               <th>Collection Name</th>
-              <th>Read </th>
-              <th>Create</th>
-              <th>Update</th>
-              <th>Delete</th>
-              <th>Override</th>
+              <th className="permission">Read </th>
+              <th className="permission">Create</th>
+              <th className="permission">Update</th>
+              <th className="permission">Delete</th>
+              <th className="permission">Override</th>
             </tr>
             {Object.keys(admin?.accessCode?.collections).map((c) => {
               return (
@@ -125,7 +154,7 @@ function AccessCodes() {
                   <td className="permission">
                     {" "}
                     <Switch
-                      checked={user?.accessCode?.collections[c]?.read}
+                      checked={(user?.accessCode?.collections || {})[c]?.read}
                       onChange={(e) => {
                         setUser((user) => {
                           return {
@@ -149,7 +178,7 @@ function AccessCodes() {
                   <td className="permission">
                     {" "}
                     <Switch
-                      checked={user?.accessCode?.collections[c]?.create}
+                      checked={(user?.accessCode?.collections || {})[c]?.create}
                       onChange={(e) => {
                         setUser((user) => {
                           return {
@@ -173,7 +202,7 @@ function AccessCodes() {
                   <td className="permission">
                     {" "}
                     <Switch
-                      checked={user?.accessCode?.collections[c]?.update}
+                      checked={(user?.accessCode?.collections || {})[c]?.update}
                       onChange={(e) => {
                         setUser((user) => {
                           return {
@@ -197,7 +226,7 @@ function AccessCodes() {
                   <td className="permission">
                     {" "}
                     <Switch
-                      checked={user?.accessCode?.collections[c]?.delete}
+                      checked={(user?.accessCode?.collections || {})[c]?.delete}
                       onChange={(e) => {
                         setUser((user) => {
                           return {
@@ -221,7 +250,9 @@ function AccessCodes() {
                   <td className="permission">
                     {" "}
                     <Switch
-                      checked={user?.accessCode?.collections[c]?.override}
+                      checked={
+                        (user?.accessCode?.collections || {})[c]?.override
+                      }
                       onChange={(e) => {
                         setUser((user) => {
                           return {
@@ -246,16 +277,6 @@ function AccessCodes() {
               );
             })}
           </table>
-          <div className="actions">
-            {" "}
-            <button onClick={update}>
-              <Save /> Save
-            </button>
-            <button className="revert" onClick={getUser}>
-              <Backspace />
-              Revert{" "}
-            </button>
-          </div>
         </div>
       </div>
     </div>

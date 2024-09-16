@@ -1,81 +1,40 @@
-.expand-page .expanded-user-details {
-  display: flex;
-  flex-direction: row;
-  padding: 16px;
-  column-gap: 40px;
-}
-
-.expand-page .expanded-user-details h2 {
-  font-size: 1.2rem;
-  margin-top: 0;
-}
-
-.user-info,
-.user-address,
-.user-other-details {
-  margin-bottom: 16px;
-}
-
-.user-info p,
-.user-address p,
-.user-other-details p {
-  margin: 8px 0;
-}
-
-.user-info strong,
-.user-address strong,
-.user-other-details strong {
-  font-weight: 500;
-  color: #333;
-}
-
-.expand-page .perm_cont {
-  /* 3 in a row */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.expand-page .perm_cont .perm_item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 12px;
-  width: 25%;
-}
-
 .expand-page {
   display: flex;
+  width: 100%;
   flex-direction: column;
+  padding: 12px;
+  box-sizing: border-box;
+  gap: 12px;
 }
-
-.expand-page .user-other-details .perms-header {
+.expand-page .more_info {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-}
-
-.expand-page .tags_cont {
-  display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  gap: 3px;
+  width: 100%;
+  gap: 20px;
+  align-items: center;
+}
+.expand-page .more_info p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.expand-page .tags_cont .tag {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: #f0f0f0;
-  color: #333;
-  font-size: 0.8rem;
+.expand-page .more_info button {
   font-weight: 500;
-  margin-top: 4px;
+}
+.expand-page .tag {
+  background-color: white;
+  box-shadow: 0px 0px 4px #1114;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.expand-page .tags {
+  display: flex;
+  width: 100%;
+  gap: 12px;
 }

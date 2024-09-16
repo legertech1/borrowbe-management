@@ -17,7 +17,7 @@
   padding: 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  min-height: 150px;
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -60,15 +60,20 @@
   gap: 8px;
   align-items: start;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row !important;
 }
 .AccessCodes .user_info div {
-  flex: 1;
+  flex: 1 1;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: -8px 0;
 }
 .AccessCodes .user_info img {
-  height: 100px;
-  width: 100px;
+  height: 60px;
+  width: 60px;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -82,11 +87,28 @@
   font-family: var(--font1);
 }
 .AccessCodes .user_info h4 span {
-  color: var(--blue);
-  font-weight: 500;
+  font-weight: 600;
 }
 .AccessCodes table {
   width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0px 0px 8px #1114;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.AccessCodes .user_info ._inf {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: start;
+  width: fit-content;
+}
+.AccessCodes ._inf * {
+  margin: 0;
+}
+.AccessCodes ._inf p {
+  font-size: 15px;
+  font-weight: 500;
 }
 .AccessCodes th {
   text-align: left;
@@ -94,25 +116,24 @@
   color: white;
   font-size: 18px;
   font-family: var(--font2);
-  font-weight: 600;
+  font-weight: 500;
   background-color: #2196f3;
 }
 .AccessCodes td,
 .AccessCodes th {
-  height: 46px;
-  font-weight: 600;
+  height: 48px;
+  font-weight: 500;
   box-sizing: border-box;
-  font-size: 18px;
+  font-size: 16px;
   padding: 4px 12px;
   font-family: var(--font2);
-  /* border-radius: 4px; */
 }
 .AccessCodes td.blue {
-  background-color: #2196f322;
+  background-color: #2196f322 !important;
 }
 
 .AccessCodes .permission {
-  text-align: right;
+  text-align: center;
 }
 
 .AccessCodes .actions {
@@ -120,6 +141,8 @@
   gap: 12px;
   align-items: center;
   margin-left: auto;
+  width: fit-content !important;
+  justify-content: end !important;
 }
 
 .AccessCodes .actions button {
@@ -156,4 +179,23 @@
   fill: white;
   height: 20px;
   width: 20px;
+}
+.AccessCodes .access h3 {
+  font-weight: 600;
+  font-family: var(--font1);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  margin: 0;
+}
+.AccessCodes .access ul {
+  margin: 0;
+  padding: 0;
+}
+
+.AccessCodes .user_info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
