@@ -74,7 +74,7 @@ const UserDetails = () => {
         filters: {
           user: params.id,
         },
-        count: 20,
+        count: 1000,
         collectionName: COLLECTIONS_NAMES.AD,
         page: newPage,
       });
@@ -196,6 +196,7 @@ const UserDetails = () => {
         <GenericCard hide={true} title={`User's Listings:`}>
           <div className="table_cont">
             <GenericTable
+              ignorePagination={true}
               multiple={true}
               columns={userAdsColumns}
               data={ads}
@@ -217,6 +218,7 @@ const UserDetails = () => {
         <GenericCard hide={true} title={`My Favorite:`}>
           <div className="table_cont">
             <GenericTable
+              ignorePagination={true}
               multiple={true}
               columns={favtAdsColumns}
               data={favtAds}

@@ -28,6 +28,7 @@ function GenericTable({
   multiple,
   curr,
   size,
+  ignorePagination,
 }) {
   console.log(columns);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -400,9 +401,11 @@ function GenericTable({
           </tbody>
         </table>
       </div>
-      <div className="pagination_cont">
-        <Pagination />
-      </div>
+      {!ignorePagination && (
+        <div className="pagination_cont">
+          <Pagination />
+        </div>
+      )}
     </>
   );
 }
