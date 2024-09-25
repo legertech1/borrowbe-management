@@ -41,7 +41,7 @@ function Terminal({}) {
     }
     setProcessing(true);
     const res = (await axios.post(apis.executeCommand, commandObj)).data;
-    console.log(res);
+
     setProcessing(false);
     setCommands((c) => [
       ...c,

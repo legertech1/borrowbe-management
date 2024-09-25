@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "../ManageShared";
 import "./GenericCard.css";
+import { Cancel, Close, Edit, Remove, Save } from "@mui/icons-material";
 
 export default function GenericCard({
   hide,
@@ -26,13 +27,13 @@ export default function GenericCard({
                     className="primary"
                     onClick={handleSave && handleSave}
                   >
-                    Save
+                    <Save /> Save
                   </Button>
                   <Button
                     className="error"
                     onClick={handleCancelClick && handleCancelClick}
                   >
-                    Cancel
+                    <Close /> Cancel
                   </Button>
                 </>
               ) : (
@@ -40,7 +41,7 @@ export default function GenericCard({
                   className="primary"
                   onClick={handleEditClick && handleEditClick}
                 >
-                  Edit
+                  <Edit /> Edit
                 </Button>
               )}
             </div>

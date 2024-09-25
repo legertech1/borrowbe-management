@@ -1,28 +1,55 @@
 .manage_card {
-  margin: 16px;
-  border-radius: 12px;
-  background-color: #f9f9f9;
+  margin: 16px 0;
   width: 100%;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px #1114;
+  overflow: hidden;
 }
-
+.manage_card .table_cont {
+  position: relative;
+  top: -4px;
+}
 .manage_card .card_header {
   display: flex;
   justify-content: space-between;
-  background-color: #6c757d;
+  background-color: var(--blue);
   padding: 0px 16px;
   color: white;
+  font-weight: 600 !important;
+  align-items: center;
+  height: 54px;
+  z-index: 10;
+  position: relative;
+}
+.manage_card .card_header > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .manage_card .card_header .title {
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
+  font-family: var(--font1);
 }
 
 .manage_card .actions {
-  margin-top: 7px;
   text-align: center;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   column-gap: 10px;
+}
+
+.manage_card .card_header ._btn_core {
+  background-color: white;
+  color: var(--blue);
+  max-height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.manage_card .card_header .error {
+  color: red;
 }

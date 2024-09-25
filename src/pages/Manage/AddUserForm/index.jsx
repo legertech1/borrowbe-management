@@ -42,14 +42,6 @@ export default function AddUserForm() {
   };
 
   const handleSubmit = async () => {
-    let proceed = false;
-
-    if (!proceed) {
-      return notification.error(
-        "You don't have permission to create this user"
-      );
-    }
-
     if (validateForm()) {
       let names = formData.fullName.trim().split(" ");
       let firstName = names[0][0].toUpperCase() + names[0].slice(1);
@@ -60,12 +52,11 @@ export default function AddUserForm() {
 
       try {
         setLoading(true);
-        await axios.post(apis.registerEmployee, {
+        await axios.post(apis.register, {
           firstName,
           lastName,
           email: formData.email.toLowerCase(),
           password: formData.password,
-          permissions: accType === "USER" ? null : selectedPermissions,
         });
         notification.success("User created successfully");
         setFormData({
@@ -104,7 +95,6 @@ export default function AddUserForm() {
         value={formData.password}
         onChange={(e) => handleFormData(e.target.name, e.target.value)}
       />
-      <label>Account type:</label>
 
       <Button
         loading={loading}

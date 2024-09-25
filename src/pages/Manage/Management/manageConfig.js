@@ -12,6 +12,7 @@ const userKeys = [
   { key: "email", label: "Email" },
   { key: "firstName", label: "First Name" },
   { key: "lastName", label: "Last Name" },
+
   // { key: "user.info.phone", label: "Phone" },
   // { key: "user.info.city", label: "City" },
   // { key: "user._id", label: "User ID" },
@@ -31,10 +32,10 @@ const adKeys = [
   { key: "listingID", label: "Listing ID" },
   { key: "title", label: "Title" },
   { key: "description", label: "Description" },
-  { key: "user", label: "User ID" },
+  { key: "customerID", label: "Customer ID" },
   { key: "price", label: "Price" },
   { key: "term", label: "Term" },
-  { key: "category", label: "Category" },
+  { key: "meta.category", label: "Category" },
 ];
 
 export const conditions = [
@@ -66,10 +67,14 @@ export const conditions = [
 
 export const buildFilterQuery = (filters) => {
   const filterQuery = {};
-
+  console.log(filters);
   filters.forEach((filter) => {
     let { key, condition, value } = filter;
-    value = value.toLowerCase();
+    if (key == "term") {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+    } else {
+      value = value.toLowerCase();
+    }
 
     if (key === "user.verified" && condition === "eq") {
       value = value === "true" ? true : value === "false" ? false : value;
@@ -105,23 +110,32 @@ export const buildFilterQuery = (filters) => {
 const getTheseKeysOnly = (collection) => {
   let keys = {
     users: [
-      "customerID",
-      { label: "Full name", path: (u) => u?.firstName + " " + u?.lastName },
-      "email",
-      "createdAt",
-      "accountLocked",
+      { label: "Customer ID", path: (u) => u?.customerID },
+      { label: "Full Name", path: (u) => u?.firstName + " " + u?.lastName },
+      { label: "Email", path: (u) => u?.email },
+      { label: "Created", path: (u) => u?.createdAt },
+      {
+        label: "Account Locked?",
+        path: (u) => (u.accountLocked ? true : false),
+        update: (u) => {
+          return { accountLocked: u.accountLocked ? false : true };
+        },
+      },
       { label: "Ads", path: (u) => u?.data?.postedAds?.total },
     ],
 
     ads: [
-      "title",
-      "price",
-      "status",
-      "listingID",
-      "term",
-      "category",
-      "subCategory",
-      "createdAt",
+      { label: "Title", path: (a) => a.title },
+      { label: "Price", path: (a) => a.price },
+      {
+        label: "Status",
+        path: (a) => (a.meta?.status == "active" ? true : false),
+      },
+      { label: "Listing ID", path: (a) => a.listingID },
+      { label: "Term", path: (a) => a.term },
+      { label: "category", path: (u) => u?.meta?.category },
+      { label: "Sub-category", path: (u) => u?.meta?.subCategory },
+      { label: "Created", path: (u) => u?.createdAt },
     ],
   };
 
@@ -159,7 +173,6 @@ export const prepareDataForTable = (data, collection) => {
       columns: newCols,
     };
   } catch (error) {
-    console.log("error: ", error);
     return {
       rows: [],
       columns: [],
@@ -217,13 +230,13 @@ export const collections = [
     label: "Users",
     key: COLLECTIONS_NAMES.USER,
     keys: userKeys,
-    sort: "customerID",
+    sort: { label: "Customer ID", path: (u) => u?.customerID },
   },
   {
     label: "Ads",
     key: COLLECTIONS_NAMES.AD,
     keys: adKeys,
-    sort: "listingID",
+    sort: { label: "Listing ID", path: (a) => a.listingID },
   },
 ];
 

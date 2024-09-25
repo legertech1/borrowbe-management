@@ -8,6 +8,7 @@ import GenericCard from "./GenericCard";
 import AddressInfo from "./AddressInfo";
 import ContactDetails from "./ContactDetails";
 import {
+  collections,
   COLLECTIONS_NAMES,
   prepareDataForTable,
   prepareSearchesData,
@@ -79,6 +80,7 @@ const UserDetails = () => {
       });
 
       let data = prepareDataForTable(response.data.data, COLLECTIONS_NAMES.AD);
+      console.log(data);
       setAds(data.rows);
       setUserAdsColumns(data.columns);
       setLoading(false);
@@ -208,6 +210,7 @@ const UserDetails = () => {
               currentCollection={COLLECTIONS_NAMES.AD}
               updateItems={updateItems}
               deleteItems={deleteItems}
+              curr={collections[1]}
             />
           </div>
         </GenericCard>
@@ -226,23 +229,7 @@ const UserDetails = () => {
               currentCollection={"FavoriteAds"}
               updateItems={updateItems}
               deleteItems={deleteItems}
-            />
-          </div>
-        </GenericCard>
-        <GenericCard hide={true} title={`Saved Searches:`}>
-          <div className="table_cont">
-            <GenericTable
-              hideAction={true}
-              multiple={false}
-              columns={prepareSearchesData(user?.data?.searches || []).columns}
-              data={prepareSearchesData(user?.data?.searches || []).rows}
-              pagination={{
-                currentPage: 1,
-                totalPages: 1,
-              }}
-              expand={false}
-              currentCollection={"Saved"}
-              updateItems={updateItems}
+              curr={collections[1]}
             />
           </div>
         </GenericCard>

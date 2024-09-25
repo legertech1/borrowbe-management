@@ -1,5 +1,4 @@
 export default function (pricing, user, category, ignoreFree = false) {
-  console.log(pricing, user, category);
   let total = 0;
   let cart = {};
 

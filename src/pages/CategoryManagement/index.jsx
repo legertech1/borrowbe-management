@@ -285,8 +285,6 @@ function CategoryManagement() {
 
     await axios.post(apis.updateCategoryFields + selectedCategory._id, {
       fields: categoryFields.map((f) => {
-        console.log(f.options.type);
-
         return {
           ...f,
           options:

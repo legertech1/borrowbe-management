@@ -100,48 +100,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f0f0f0;
-  padding: 20px 10px;
-  margin: 10px 0px;
-  border-top: 1px solid #c1c1c1;
-}
-
-.table_cont .top_bar_left {
-  display: flex;
-  align-items: center;
-}
-
-.table_cont .top_bar_left_item {
-  margin-right: 20px;
-}
-
-.table_cont .top_bar_right {
-  display: flex;
-  align-items: center;
-}
-
-.table_cont .top_bar_right_item {
-  margin-right: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-/* Style the Delete and Blocked spans as buttons */
-.table_cont .top_bar_right_item span {
-  cursor: pointer;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 6px 0;
+  box-shadow: 0px 0px 8px #1114;
   border-radius: 4px;
-  background-color: #fff;
 }
 
 /* Add hover effect to the buttons */
-.table_cont .top_bar_right_item span:hover {
-  background-color: #e0e0e0;
-}
 
 /* Pagination Footer Container */
 .table_cont .pagination-footer {
@@ -155,7 +120,11 @@
   font-size: 26px;
   cursor: pointer;
 }
-
+.table_cont .top_bar .selected span {
+  font-size: large;
+  font-weight: 600;
+  color: var(--blue);
+}
 .table_cont .eye_icon {
   font-size: 26px;
   cursor: pointer;
@@ -169,18 +138,31 @@
   height: 20px;
   width: 20px;
 }
-.generic_table::-webkit-scrollbar {
+.generic_table_container::-webkit-scrollbar {
   width: 7px;
-  display: block !important;
-  border-radius: 4px;
 }
 
-.generic_table::-webkit-scrollbar-track {
+.generic_table_container::-webkit-scrollbar-track {
   background: var(--bg);
-  border-radius: 4px;
 }
 
-.generic_table::-webkit-scrollbar-thumb {
-  background-color: var(--blue);
-  border-radius: 4px;
+.generic_table_container::-webkit-scrollbar-thumb {
+  background-color: #2196f3;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: block;
+  max-width: 6px;
+  width: 6px;
+}
+.generic_table td .price {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--blue);
+  font-family: var(--font1);
+}
+.generic_table td .undisclosed {
+  font-size: 16px;
+  color: var(--blue);
+  font-weight: 500;
+  font-family: var(--font1);
 }

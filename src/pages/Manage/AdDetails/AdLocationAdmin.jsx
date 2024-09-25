@@ -32,7 +32,6 @@ export default function AdLocationAdmin({ ad, handleSave }) {
     });
   };
 
-  // console.log(ad);
   // useEffect(() => {
   //   location &&
   //     geocodeByAddress( location.name).then(

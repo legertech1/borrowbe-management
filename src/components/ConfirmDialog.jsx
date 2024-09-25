@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ConfirmDialog.css";
 import { ErrorOutlineOutlined } from "@mui/icons-material";
+import Button from "./Shared/Button";
 
 const ConfirmDialog = ({ message, onConfirm, onCancel, onClose }) => {
   const [visible, setVisible] = useState(true);
@@ -54,12 +55,12 @@ const ConfirmDialog = ({ message, onConfirm, onCancel, onClose }) => {
             {message}
           </div>
           <div className="button-container">
-            <button className="btn_blue_m" onClick={cancel}>
+            <Button className="btn_blue_m" onClick={cancel}>
               Cancel
-            </button>
-            <button className="btn_red_m" onClick={confirm}>
+            </Button>
+            <Button className="btn_red_m" onClick={confirm}>
               Confirm
-            </button>
+            </Button>
           </div>
         </div>
       </div>

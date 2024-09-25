@@ -68,19 +68,14 @@ const AdDetails = () => {
   }, [params.id]);
 
   return (
-    
-      <div className="manage_profile">
-        <div className="user_profile">
-          <div>
-            <Link to="/">Back to home</Link>
-          </div>
-          {ad && <AdGeneralInfo ad={ad} handleSave={handleSave} />}
-          {ad && <AdImages ad={ad} handleSave={handleSave} />}
-          {ad && <AdLocationAdmin ad={ad} handleSave={handleSave} />}
-          {ad && <AdFieldMapAdmin ad={ad} handleSave={handleSave} />}
-        </div>
+    <div className="manage_profile">
+      <div className="user_profile">
+        {ad && <AdGeneralInfo ad={ad} handleSave={handleSave} />}
+        {ad && <AdImages ad={ad} handleSave={handleSave} />}
+        {/* {ad && <AdLocationAdmin ad={ad} handleSave={handleSave} />} */}
+        {/* {ad && <AdFieldMapAdmin ad={ad} handleSave={handleSave} />} */}
       </div>
-
+    </div>
   );
 };
 

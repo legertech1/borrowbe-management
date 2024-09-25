@@ -41,7 +41,7 @@ export default function AdImages({ ad, handleSave }) {
       handleCancelClick={handleCancelClick}
       handleEditClick={handleEditClick}
     >
-      <div>
+      <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
         {thumbs.map((thumbnail, index) => (
           <div key={index} className="admin_image_cont">
             {isEditing && (
@@ -56,7 +56,14 @@ export default function AdImages({ ad, handleSave }) {
               loading="eager"
               src={thumbnail ? thumbnail : "https://via.placeholder.com/150"}
               alt="thumbnail"
-              style={{ margin: "10px", width: "150px", height: "150px" }}
+              style={{
+                margin: "10px",
+                minWidth: "150px",
+                height: "150px",
+                objectFit: "cover",
+                borderRadius: "4px",
+                boxShadow: "0px 0px 4px #1114",
+              }}
             />
           </div>
         ))}

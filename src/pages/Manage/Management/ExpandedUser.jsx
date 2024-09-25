@@ -62,6 +62,23 @@ export default function ExpandedUser({ user }) {
           Update Permissions
         </Button>
       </div>
+
+      {user?.BusinessInfo && (
+        <div className="more_info">
+          <p>
+            Business Name: <span>{user?.BusinessInfo?.name}</span>
+          </p>
+          <p>
+            Business Email: <span>{user?.BusinessInfo?.email}</span>
+          </p>
+          <p>
+            Business Phone Number: <span>{user?.BusinessInfo?.phone}</span>
+          </p>
+          <p>
+            Business Website: <span>{user?.BusinessInfo?.website}</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

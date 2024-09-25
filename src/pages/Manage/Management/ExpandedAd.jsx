@@ -19,9 +19,6 @@ export default function ExpandedUser({ ad }) {
           <span>Show Precise Location:</span>{" "}
           {ad.showPreciseLocation ? "Yes" : "No"}
         </p>
-        <p>
-          <span>Created At:</span> {dateFormatter(ad.createdAt)}
-        </p>
 
         <p>
           <span>Website:</span> {ad.website ? "Yes" : "No"}
@@ -29,7 +26,12 @@ export default function ExpandedUser({ ad }) {
         <p>
           <span>Youtube:</span> {ad.youtube ? "Yes" : "No"}
         </p>
+        <p>
+          <span>Customer ID:</span>
+          {ad?.customerID}
+        </p>
       </div>
+
       {Boolean(ad?.tags?.length) && (
         <div className="tags">
           {ad?.tags?.map((tag, index) => {

@@ -13,7 +13,8 @@ import useNotification from "../../../hooks/useNotification";
 import ExpanededRow from "./ExpanededRow";
 import TablePagination from "./TablePagination";
 import { ArrowDownward, ArrowUpward, Visibility } from "@mui/icons-material";
-
+import PageControl from "../../../components/PageControl";
+import useConfirmDialogue from "../../../hooks/useConfirmDialog";
 function GenericTable({
   columns,
   data,
@@ -26,14 +27,17 @@ function GenericTable({
   hideAction,
   multiple,
   curr,
+  size,
 }) {
+  console.log(columns);
   const [selectedRows, setSelectedRows] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [lastClickedRow, setLastClickedRow] = useState(null);
   const [lastClickTime, setLastClickTime] = useState(0);
   const [rows, setRows] = useState([]);
+  const confirm = useConfirmDialogue();
   const [sortOrder, setSortOrder] = useState({
-    column: curr?.sort || "",
+    column: curr?.sort || null,
     direction: "asc",
   });
 
@@ -58,34 +62,48 @@ function GenericTable({
       setSelectedRows([...selectedRows, row]);
     }
   };
-  const handleSort = (columnName) => {
-    console.log("sort", data);
-    const isAsc =
-      sortOrder.column === columnName && sortOrder.direction === "asc";
-    const direction = isAsc ? "desc" : "asc";
+  const handleSort = () => {
+    const isAsc = sortOrder.direction === "asc";
+    console.log(sortOrder);
+    if (!sortOrder.column) return;
 
     const sorted = [...data].sort((a, b) => {
-      if (typeof a[columnName] === "boolean") {
-        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
+      if (typeof sortOrder.column.path(a) === "boolean") {
+        return (
+          (sortOrder.column.path(a) - sortOrder.column.path(b)) *
+          (isAsc ? 1 : -1)
+        );
       }
-      if (typeof a[columnName] === "number") {
-        return (a[columnName] - b[columnName]) * (isAsc ? 1 : -1);
+      if (typeof sortOrder.column.path(a) === "number") {
+        return (
+          (sortOrder.column.path(a) - sortOrder.column.path(b)) *
+          (isAsc ? 1 : -1)
+        );
       }
-      if (a[columnName] === "true" || a[columnName] === "false") {
-        return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
+      if (
+        sortOrder.column.path(a) === "true" ||
+        sortOrder.column.path(a) === "false"
+      ) {
+        return (
+          sortOrder.column.path(a).localeCompare(sortOrder.column.path(b)) *
+          (isAsc ? 1 : -1)
+        );
       }
 
-      if (!a[columnName] && !b[columnName]) {
+      if (!sortOrder.column.path(a) && !sortOrder.column.path(b)) {
         return 0;
       }
-      if (!a[columnName] && b[columnName]) {
+      if (!sortOrder.column.path(a) && sortOrder.column.path(b)) {
         return 1;
       }
-      if (a[columnName] && !b[columnName]) {
+      if (sortOrder.column.path(a) && !sortOrder.column.path(b)) {
         return -1;
       }
 
-      return a[columnName].localeCompare(b[columnName]) * (isAsc ? 1 : -1);
+      return (
+        sortOrder.column.path(a).localeCompare(sortOrder.column.path(b)) *
+        (isAsc ? 1 : -1)
+      );
     });
 
     setRows(sorted);
@@ -94,7 +112,7 @@ function GenericTable({
   };
   useEffect(() => {
     if (!data) return;
-    handleSort(sortOrder.column);
+    handleSort();
   }, [sortOrder, data]);
 
   const handleSelectAll = () => {
@@ -130,8 +148,6 @@ function GenericTable({
   };
 
   const openDetails = (id) => {
-    console.log(id);
-
     if (currentCollection === COLLECTIONS_NAMES.USER) {
       window.open(`/user/${id}`, "_blank");
     } else if (currentCollection === COLLECTIONS_NAMES.AD) {
@@ -141,36 +157,22 @@ function GenericTable({
 
   const TopBar = () => (
     <div className="top_bar">
-      <div className="top_bar_left">
-        <div className="top_bar_left_item">
-          <span>
-            {selectedRows.length} {` `}
-            {selectedRows.length === 1 ? singleName : pluralName} selected
-          </span>
-        </div>
-        <div className="top_bar_left_item">
-          <span>
-            {expandedRows.length}
-            {expandedRows.length === 1 ? " row" : " rows"} expanded
-          </span>
-        </div>
+      <div className="selected">
+        <span> {selectedRows.length} </span>
+        {selectedRows.length === 1 ? singleName : pluralName} selected
       </div>
-      <div className="top_bar_right">
-        <div className="top_bar_right_item">
-          <Button
-            className="error"
-            onClick={() => {
-              deleteItems &&
-                deleteItems(selectedRows, currentCollection, () => {
-                  setSelectedRows([]);
-                });
-            }}
-          >
-            Delete {selectedRows.length}{" "}
-            {selectedRows.length === 1 ? singleName : pluralName}
-          </Button>
-        </div>
-      </div>
+
+      <Button
+        className="error"
+        onClick={() => {
+          deleteItems(selectedRows, currentCollection, () => {
+            setSelectedRows([]);
+          });
+        }}
+      >
+        Delete {selectedRows.length}{" "}
+        {selectedRows.length === 1 ? singleName : pluralName}
+      </Button>
     </div>
   );
 
@@ -185,7 +187,7 @@ function GenericTable({
             />
           </th>
         )}
-        {columns.map((column, index) => (
+        {columns?.map((column, index) => (
           <th
             onClick={() =>
               setSortOrder({
@@ -196,13 +198,13 @@ function GenericTable({
             key={index}
           >
             <div className="th_cont">
-              {convertToReadableKey(column.label || column)}
+              {column?.label}
               <div className="icons_cont">
-                {sortOrder.column === column &&
+                {sortOrder.column.label === column.label &&
                   sortOrder.direction === "asc" && <ArrowUpward />}
-                {sortOrder.column === column &&
+                {sortOrder.column.label === column.label &&
                   sortOrder.direction === "desc" && <ArrowDownward />}
-                {sortOrder.column !== column && (
+                {sortOrder.column.label !== column.label && (
                   <ArrowDownward style={{ opacity: 0 }} />
                 )}
               </div>
@@ -232,38 +234,41 @@ function GenericTable({
       currentCollection === COLLECTIONS_NAMES.AD ||
       currentCollection === COLLECTIONS_NAMES.DELETED_AD
     ) {
-      if (column === "status") {
-        if (row.meta.status === "expired") {
-          notification.error("Expired ads cannot be paused/resumed");
-          return;
-        }
-        delete row[column];
+      if (column.label === "Status") {
+        confirm.openDialog(
+          "Are you sure you want to update the status for Ad no. " +
+            row.listingID,
 
-        updateItems &&
-          updateItems(
-            [row._id],
-            {
-              ...row,
-              meta: {
-                ...row.meta,
-                status: row.meta.status === "active" ? "paused" : "active",
+          () =>
+            updateItems(
+              [row._id],
+              {
+                ...row,
+                meta: {
+                  ...row.meta,
+                  status: row.meta.status === "active" ? "inactive" : "active",
+                },
               },
-            },
-            currentCollection
-          );
+              currentCollection
+            )
+        );
       }
     } else if (
       currentCollection === COLLECTIONS_NAMES.USER ||
       currentCollection === COLLECTIONS_NAMES.DELETED_USER
     ) {
-      updateItems &&
-        updateItems(
-          [row],
-          {
-            [column]: !row[column],
-          },
-          currentCollection
-        );
+      confirm.openDialog(
+        "Are you sure you want to update Account Locking status for User no. " +
+          row.customerID,
+
+        () =>
+          updateItems(
+            [row],
+
+            column.update(row),
+            currentCollection
+          )
+      );
     }
   };
 
@@ -293,31 +298,32 @@ function GenericTable({
           )}
 
           {columns.map((column, columnIndex) => {
-            const switchFields = [
-              "accountLocked",
-              "verified",
-              "status",
-              "active",
-            ];
+            const switchFields = ["Account Locked?", "Verified", "Status"];
 
-            const dateFields = [
-              "created",
-              "availableFrom",
-              "availableTill",
-              "createdAt",
-              "updatedAt",
-            ];
+            const dateFields = ["Created", "Updated"];
 
-            if (dateFields.includes(column)) {
+            if (dateFields.includes(column.label)) {
               return (
                 <td key={columnIndex}>
                   {/* {new Date(row[column]).toLocaleString()} */}
-                  {formatTimestamp(row[column])}
+                  {formatTimestamp(column.path(row))}
                 </td>
               );
             }
-
-            if (switchFields.includes(column)) {
+            if (column.label == "Price") {
+              return (
+                <td key={columnIndex}>
+                  {row.priceHidden ? (
+                    <span className="undisclosed">undisclosed </span>
+                  ) : (
+                    <span className="price">
+                      {row["price"] == "0" ? "Free" : "$" + row["price"]}
+                    </span>
+                  )}
+                </td>
+              );
+            }
+            if (switchFields.includes(column.label)) {
               return (
                 <td key={columnIndex} className={"switch_cell " + column}>
                   <span>
@@ -328,9 +334,8 @@ function GenericTable({
 
                         handleSwitchChange(row, column);
                       }}
-                      checked={isChecked(row[column])}
+                      checked={column.path(row)}
                     />
-                    {column === "status" && <span>{` ${row[column]}`}</span>}
                   </span>
                 </td>
               );
@@ -341,7 +346,7 @@ function GenericTable({
                 key={columnIndex}
                 className={column}
               >
-                {column.path ? column.path(row) : row[column] || ""}
+                {column.path(row)}
               </td>
             );
           })}
@@ -369,11 +374,12 @@ function GenericTable({
 
   const Pagination = () => {
     return (
-      <TablePagination
-        currentPage={currentPage}
-        onPageChange={onPageChange}
-        totalPages={totalPages}
-      />
+      <PageControl
+        page={currentPage}
+        setPage={onPageChange}
+        count={pagination.totalResults}
+        size={size}
+      ></PageControl>
     );
   };
 

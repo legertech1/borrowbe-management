@@ -1,8 +1,7 @@
 import React from "react";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import "./index.css";
 
+import "./index.css";
+import BTN from "../../../components/Shared/Button";
 export const Input = React.forwardRef((props, ref) => {
   const [show, setShow] = React.useState(false);
 
@@ -17,21 +16,7 @@ export const Input = React.forwardRef((props, ref) => {
         ref={ref}
       />
 
-      {props.type === "password" && (
-        <>
-          {!show ? (
-            <VisibilityOffIcon
-              className="eye_icon"
-              onClick={() => setShow(!show)}
-            />
-          ) : (
-            <VisibilityIcon
-              className="eye_icon"
-              onClick={() => setShow(!show)}
-            />
-          )}
-        </>
-      )}
+      {props.type === "password" && <></>}
     </div>
   );
 });
@@ -74,7 +59,7 @@ export function Checkbox(props) {
 
 export function Button(props) {
   return (
-    <button
+    <BTN
       {...props}
       disabled={props.disabled || props.loading}
       onClick={() => {
@@ -84,7 +69,7 @@ export function Button(props) {
     >
       {props.loading && <div className="loader"></div>}
       {props.children}
-    </button>
+    </BTN>
   );
 }
 

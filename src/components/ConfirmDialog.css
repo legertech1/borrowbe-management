@@ -90,3 +90,8 @@ body.no-scroll {
     opacity: 1;
   }
 }
+
+.confirm-dialog button {
+  min-height: 50px;
+  font-weight: 500;
+}

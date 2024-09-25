@@ -3,7 +3,6 @@ const USER_ROLES = {
   ADMIN: "ADMIN",
   LEVEL1: "LEVEL1",
   LEVEL2: "LEVEL2",
-  
 };
 
 export const ALL_PERMISSIONS_OBJ = {
@@ -83,13 +82,7 @@ export function setPermissions(perms) {
 }
 
 export function userCan(action, fn) {
-  console.log("action: ", action);
-  console.log("currPerms: ", currPerms);
   const isAllowed = currPerms.includes(action);
-
-  // if (fn && !isAllowed) {
-  //   alert(`You are not allowed to perform ${action}`);
-  // }
 
   return isAllowed && fn ? fn() : isAllowed;
 }

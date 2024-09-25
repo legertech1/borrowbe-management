@@ -42,7 +42,7 @@ function UserManagement({ currentCollection }) {
     setFilters([
       {
         label: allKeys[currentCollection.key][0].label,
-        condition: currentCollection.label,
+        condition: conditions[0].label,
         value: "",
       },
     ]);
@@ -88,10 +88,14 @@ function UserManagement({ currentCollection }) {
     const filteredArray = tempFilters.filter((filter) => filter.value !== "");
     const newFilteredArray = filteredArray.map((filter) => {
       const { label, condition, value } = filter;
-
+      console.log(label, conditions, condition);
       return {
-        key: allKeys[currentCollection.key].find((k) => k.label === label).key,
-        condition: conditions.find((c) => c.label === condition).key,
+        key: allKeys[currentCollection.key].filter(
+          (obj) =>
+            obj.label == label ||
+            obj.label?.toLowerCase() == label.text?.toLowerCase()
+        )[0]?.key,
+        condition: conditions.filter((c) => c.label == condition)[0]?.key,
         value,
       };
     });
@@ -158,6 +162,7 @@ function UserManagement({ currentCollection }) {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      console.log(error);
       alert("Error searching data");
     }
   };
@@ -178,16 +183,26 @@ function UserManagement({ currentCollection }) {
     }
   };
 
-  const updateItems = async (ids, data) => {
+  const updateItems = async (ids, updates) => {
     try {
       setLoading(true);
-      await axios.post(apis.manageUpdateItems, {
+      const { data } = await axios.post(apis.manageUpdateItems, {
         ids,
         collectionName: currentCollection.key,
-        updates: data,
+        updates,
       });
-      handleSearch();
+      setRows((rows) =>
+        rows.map((doc) => {
+          let final = doc;
+          for (let i = 0; i < data.length; i++) {
+            if (data[i]._id == doc._id) final = data[i];
+          }
+          return final;
+        })
+      );
+      // handleSearch(pagination.currentPage);
     } catch (error) {
+      console.log(error);
       setLoading(false);
       alert("Error updating items");
     }
@@ -263,7 +278,10 @@ function UserManagement({ currentCollection }) {
                 ))}
             </div>
             <div className="row actions">
-              <Button onClick={handleSearch} className="primary">
+              <Button
+                onClick={() => handleSearch(1, filters)}
+                className="primary"
+              >
                 <Search /> Search
               </Button>
               <Button onClick={handleClearAll} className="error">
@@ -312,6 +330,7 @@ function UserManagement({ currentCollection }) {
               curr={currentCollection}
               deleteItems={deleteItems}
               updateItems={updateItems}
+              size={qty}
             />
           )}
         </div>

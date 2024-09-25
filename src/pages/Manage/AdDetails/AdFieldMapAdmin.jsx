@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GenericCard from "../UserDetails/GenericCard";
-
+import Dropdown from "../../../components/Shared/Dropdown";
 import { Checkbox, Input, Select } from "../ManageShared";
 import { useSelector } from "react-redux";
 
@@ -133,9 +133,7 @@ const FieldMap = ({ field, state, setState, disabled }) => {
         />
       )}
       {field.inputType == "dropdown" && (
-        <Select
-          name={field.name}
-          label={field.name}
+        <Dropdown
           value={state.extraFields[field.name] || ""}
           onChange={(e) => {
             setState({
@@ -147,11 +145,7 @@ const FieldMap = ({ field, state, setState, disabled }) => {
             });
           }}
           disabled={disabled}
-        >
-          {field.options.map((option) => (
-            <option value={option}>{option}</option>
-          ))}
-        </Select>
+        ></Dropdown>
       )}
       {field.inputType == "checkbox" && (
         <div className="checkbox_container">
