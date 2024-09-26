@@ -30,7 +30,6 @@ function GenericTable({
   size,
   ignorePagination,
 }) {
-  console.log(columns);
   const [selectedRows, setSelectedRows] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [lastClickedRow, setLastClickedRow] = useState(null);

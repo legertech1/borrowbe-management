@@ -11,32 +11,6 @@ import Button from "../../../components/Shared/Button";
 export default function ExpandedUser({ user }) {
   const navigate = useNavigate();
 
-  const [permissions, setPermissions] = useState([]);
-  const notification = useNotification();
-
-  const getPermissions = async (id) => {
-    try {
-      let perms = await axios.get(apis.permissions + "/" + id);
-
-      setPermissions(perms.data.permissions);
-    } catch (error) {}
-  };
-
-  const updatePermissions = async () => {
-    try {
-      await axios.put(apis.permissions + "/" + user._id, {
-        permissions,
-      });
-      notification.success("Permissions updated successfully");
-    } catch (error) {
-      notification.error("Error updating permissions");
-    }
-  };
-
-  useEffect(() => {
-    user?._id && getPermissions(user?._id);
-  }, [user?._id]);
-
   return (
     <div className="expand-page">
       <div className="more_info">

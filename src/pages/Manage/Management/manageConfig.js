@@ -72,8 +72,6 @@ export const buildFilterQuery = (filters) => {
     let { key, condition, value } = filter;
     if (key == "term") {
       value = value.charAt(0).toUpperCase() + value.slice(1);
-    } else {
-      value = value.toLowerCase();
     }
 
     if (key === "user.verified" && condition === "eq") {

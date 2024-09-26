@@ -85,17 +85,19 @@ function UserManagement({ currentCollection }) {
 
   const prepareFilters = (f) => {
     let tempFilters = f || filters || [];
+
     const filteredArray = tempFilters.filter((filter) => filter.value !== "");
+
     const newFilteredArray = filteredArray.map((filter) => {
       const { label, condition, value } = filter;
-      console.log(label, conditions, condition);
+
       return {
         key: allKeys[currentCollection.key].filter(
           (obj) =>
             obj.label == label ||
             obj.label?.toLowerCase() == label.text?.toLowerCase()
         )[0]?.key,
-        condition: conditions.filter((c) => c.label == condition)[0]?.key,
+        condition: conditions.filter((c) => c.label == condition.text)[0]?.key,
         value,
       };
     });
