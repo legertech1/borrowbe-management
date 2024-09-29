@@ -103,6 +103,7 @@ const apis = {
     apiUrl + "/api/categories/update-sub-category-fields/",
   executeCommand: apiUrl + "/api/manage/command/",
   updateAccessCode: apiUrl + "/api/manage/update-access-code/",
+  createUser: "/api/manage/create-user/",
 };
 
 export default apis;

@@ -21,6 +21,8 @@ import Modal from "../../../components/Modal";
 import AddUserForm from "../AddUserForm/index";
 import { useSelector } from "react-redux";
 import { Add, ClearAll, Search } from "@mui/icons-material";
+import useNotification from "../../../hooks/useNotification";
+import useConfirmDialog from "../../../hooks/useConfirmDialog";
 
 function UserManagement({ currentCollection }) {
   const [filters, setFilters] = useState([]);
@@ -168,21 +170,31 @@ function UserManagement({ currentCollection }) {
       alert("Error searching data");
     }
   };
-
+  const confirm = useConfirmDialog();
+  const notification = useNotification();
   const deleteItems = async (ids, collection, cb) => {
-    try {
-      setLoading(true);
-      await axios.post(apis.manageDeleteItems, {
-        ids,
-        collectionName: currentCollection.key,
-      });
+    confirm.openDialog(
+      "Are you sure you want to delete " +
+        ids.length +
+        (collection == "User" ? " users" : " ads"),
+      async () => {
+        try {
+          setLoading(true);
+          await axios.post(apis.manageDeleteItems, {
+            ids,
+            collectionName: currentCollection.key,
+          });
 
-      handleSearch();
-      cb && cb();
-    } catch (error) {
-      setLoading(false);
-      alert("Error deleting items");
-    }
+          handleSearch();
+          cb && cb();
+        } catch (err) {
+          setLoading(false);
+          notification.error(
+            err?.response?.data?.error || err?.response?.data || err?.message
+          );
+        }
+      }
+    );
   };
 
   const updateItems = async (ids, updates) => {
@@ -203,10 +215,12 @@ function UserManagement({ currentCollection }) {
         })
       );
       // handleSearch(pagination.currentPage);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
       setLoading(false);
-      alert("Error updating items");
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
     }
   };
 

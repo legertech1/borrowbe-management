@@ -52,7 +52,7 @@ export default function AddUserForm() {
 
       try {
         setLoading(true);
-        await axios.post(apis.register, {
+        await axios.post(apis.createUser, {
           firstName,
           lastName,
           email: formData.email.toLowerCase(),
@@ -65,8 +65,10 @@ export default function AddUserForm() {
           password: "",
         });
         setLoading(false);
-      } catch (error) {
-        notification.error(error.response.data.error);
+      } catch (err) {
+        notification.error(
+          err?.response?.data?.error || err?.response?.data || err?.message
+        );
         setLoading(false);
       }
     }

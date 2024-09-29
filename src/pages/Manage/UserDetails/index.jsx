@@ -14,6 +14,9 @@ import {
   prepareSearchesData,
 } from "../Management/manageConfig";
 import GenericTable from "../Management/GenericTable";
+import useNotification from "../../../hooks/useNotification";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+import useConfirmDialog from "../../../hooks/useConfirmDialog";
 
 const UserDetails = () => {
   const [loading, setLoading] = useState(false);
@@ -124,7 +127,7 @@ const UserDetails = () => {
       alert("Error updating items");
     }
   };
-
+  const notification = useNotification();
   const deleteItems = async (ids, collection, cb) => {
     if (collection === "FavoriteAds") {
       try {
@@ -143,9 +146,11 @@ const UserDetails = () => {
         await fetchUser();
         await fetchFavoritesAds();
         cb && cb();
-      } catch (error) {
+      } catch (err) {
         setLoading(false);
-        alert("Error deleting items");
+        notification.error(
+          err?.response?.data?.error || err?.response?.data || err?.message
+        );
       }
     } else {
       try {
