@@ -24,6 +24,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { fetchCategories, setCategories } from "../../store/categorySlice";
+import useNotification from "../../hooks/useNotification";
 
 function CategoryManagement() {
   const user = useSelector((state) => state.auth);
@@ -69,7 +70,7 @@ function CategoryManagement() {
 
   const [viewPackages, setViewPackages] = useState(false);
   const [viewAddOns, setViewAddOns] = useState(false);
-
+  const notification = useNotification();
   const [viewExtras, setViewExtras] = useState(false);
   const categoryIconRef = useRef();
   const [editCategoryFields, setEditCategoryFields] = useState(false);
@@ -179,90 +180,174 @@ function CategoryManagement() {
       "Are you sure you want to delete the selected Categories?"
     );
     if (!conf) return setSelectedCategories([]);
-    await axios.post(apis.deleteCategories, {
-      ids: selectedCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deleteCategories, {
+        ids: selectedCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function updatePackages(id, packages) {
-    await axios.put(apis.updatePackages + id, packages);
-    getCatgeories();
+    try {
+      await axios.put(apis.updatePackages + id, packages);
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function updateAddOns(id, addOns) {
-    await axios.put(apis.updateAddOns + id, addOns);
-    getCatgeories();
+    try {
+      await axios.put(apis.updateAddOns + id, addOns);
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function updateExtras(id, extras) {
-    await axios.put(apis.updateExtras + id, extras);
-    getCatgeories();
+    try {
+      await axios.put(apis.updateExtras + id, extras);
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function deleteSubCategories() {
     const conf = window.confirm(
       "Are you sure you want to delete the selected Sub-categories?"
     );
     if (!conf) return setSelectedSubCategories([]);
-    await axios.post(apis.deleteSubCategories, {
-      ids: selectedSubCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deleteSubCategories, {
+        ids: selectedSubCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+  function findInCollection(col, id) {
+    for (let i = 0; i < col.length; i++) {
+      if (col[i]._id === id) {
+        return col[i];
+      }
+    }
+  }
+
   async function deactivateCategories() {
-    await axios.post(apis.deactivateCategories, {
-      ids: selectedCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deactivateCategories, {
+        ids: selectedCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function activateCategories() {
-    await axios.post(apis.activateCategories, {
-      ids: selectedCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.activateCategories, {
+        ids: selectedCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function deactivateSubCategories() {
-    await axios.post(apis.deactivateSubCategories + selectedCategory._id, {
-      ids: selectedSubCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deactivateSubCategories + selectedCategory._id, {
+        ids: selectedSubCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function activateSubCategories() {
-    await axios.post(apis.activateSubCategories + selectedCategory._id, {
-      ids: selectedSubCategories.map((item) => item._id),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.activateSubCategories + selectedCategory._id, {
+        ids: selectedSubCategories.map((item) => item._id),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function makeCategory() {
     if (!categoryForm.name || !categoryForm.icon || !categoryForm.status)
       return;
     setCategoryForm({ name: "", icon: "", status: "active" });
-    await axios.post(apis.makeCategory, categoryForm);
-
-    getCatgeories();
+    try {
+      await axios.post(apis.makeCategory, categoryForm);
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function makeSubCategory() {
     if (!subCategoryForm.name || !subCategoryForm.status) return;
     setSubCategoryForm({ name: "", status: "active" });
-    await axios.post(
-      apis.makeSubCategory + selectedCategory._id,
-      subCategoryForm
-    );
-
-    getCatgeories();
+    try {
+      await axios.post(
+        apis.makeSubCategory + selectedCategory._id,
+        subCategoryForm
+      );
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
-
   async function deleteCategoryFields() {
     const conf = window.confirm(
       "Are you sure you want to delete the selected fields?"
     );
     if (!conf) return setSelectedCategoryFields([]);
     if (!selectedCategory) return;
-    await axios.post(apis.deleteCategoryFields + selectedCategory._id, {
-      fields: selectedCategoryFields,
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deleteCategoryFields + selectedCategory._id, {
+        fields: selectedCategoryFields,
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function makeCategoryField() {
     if (!selectedCategory) return;
     setFieldForm({
@@ -273,40 +358,24 @@ function CategoryManagement() {
       info: "",
       options: "",
     });
-    await axios.post(apis.makeCategoryField + selectedCategory._id, {
-      ...fieldForm,
-      options: fieldForm.options.split(",").map((item) => item.trim()),
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.makeCategoryField + selectedCategory._id, {
+        ...fieldForm,
+        options: fieldForm.options.split(",").map((item) => item.trim()),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function updateCategoryFields() {
     if (!selectedCategory || !selectedCategoryFields) return;
-
-    await axios.post(apis.updateCategoryFields + selectedCategory._id, {
-      fields: categoryFields.map((f) => {
-        return {
-          ...f,
-          options:
-            typeof f.options == "string"
-              ? f.options?.split(",")?.map((item) => item.trim())
-              : f.options,
-        };
-      }),
-    });
-    getCatgeories();
-  }
-
-  async function updateSubCategoryFields() {
-    if (!selectedSubCategory || !selectedSubCategoryFields) return;
-
-    await axios.post(
-      apis.updateSubCategoryFields +
-        selectedCategory._id +
-        "/" +
-        selectedSubCategory._id,
-      {
-        fields: subCategoryFields.map((f) => {
+    try {
+      await axios.post(apis.updateCategoryFields + selectedCategory._id, {
+        fields: categoryFields.map((f) => {
           return {
             ...f,
             options:
@@ -315,9 +384,41 @@ function CategoryManagement() {
                 : f.options,
           };
         }),
-      }
-    );
-    getCatgeories();
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
+  }
+
+  async function updateSubCategoryFields() {
+    if (!selectedSubCategory || !selectedSubCategoryFields) return;
+    try {
+      await axios.post(
+        apis.updateSubCategoryFields +
+          selectedCategory._id +
+          "/" +
+          selectedSubCategory._id,
+        {
+          fields: subCategoryFields.map((f) => {
+            return {
+              ...f,
+              options:
+                typeof f.options == "string"
+                  ? f.options?.split(",")?.map((item) => item.trim())
+                  : f.options,
+            };
+          }),
+        }
+      );
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function deleteSubCategoryFields() {
@@ -326,11 +427,18 @@ function CategoryManagement() {
     );
     if (!conf) return setSelectedSubCategoryFields([]);
     if (!selectedSubCategory) return;
-    await axios.post(apis.deleteSubCategoryFields + selectedSubCategory._id, {
-      fields: selectedSubCategoryFields,
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.deleteSubCategoryFields + selectedSubCategory._id, {
+        fields: selectedSubCategoryFields,
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function makeSubCategoryField() {
     if (!selectedSubCategory) return;
     setFieldForm({
@@ -341,57 +449,79 @@ function CategoryManagement() {
       info: "",
       options: "",
     });
-    await axios.post(apis.makeSubCategoryField + selectedSubCategory._id, {
-      ...fieldForm,
-      options: fieldForm.options.split(",").map((item) => item.trim()),
-    });
-    getCatgeories();
-  }
-
-  function findInCollection(col, id) {
-    for (let i = 0; i < col.length; i++) {
-      if (col[i]._id === id) {
-        return col[i];
-      }
+    try {
+      await axios.post(apis.makeSubCategoryField + selectedSubCategory._id, {
+        ...fieldForm,
+        options: fieldForm.options.split(",").map((item) => item.trim()),
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
     }
   }
 
   async function updateCategories() {
-    for (let i = 0; i < selectedCategories.length; i++) {
-      await axios.post(
-        apis.updateCategory + selectedCategories[i]._id,
-        selectedCategories[i]
+    try {
+      for (let i = 0; i < selectedCategories.length; i++) {
+        await axios.post(
+          apis.updateCategory + selectedCategories[i]._id,
+          selectedCategories[i]
+        );
+      }
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
       );
     }
-
-    getCatgeories();
   }
+
   async function updateSubCategories() {
-    for (let i = 0; i < selectedSubCategories.length; i++) {
-      await axios.post(
-        apis.updateSubCategory + selectedSubCategories[i]._id,
-        selectedSubCategories[i]
+    try {
+      for (let i = 0; i < selectedSubCategories.length; i++) {
+        await axios.post(
+          apis.updateSubCategory + selectedSubCategories[i]._id,
+          selectedSubCategories[i]
+        );
+      }
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
       );
     }
-
-    getCatgeories();
   }
+
   async function updateCategoryRules() {
     if (!selectedCategory) return;
-    await axios.post(
-      apis.updateCategoryRules + selectedCategory._id,
-      selectedCategory.rules
-    );
-    getCatgeories();
+    try {
+      await axios.post(
+        apis.updateCategoryRules + selectedCategory._id,
+        selectedCategory.rules
+      );
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function updateSubCategoryRules() {
     if (!selectedSubCategory) return;
-    await axios.post(
-      apis.updateSubCategoryRules + selectedSubCategory._id,
-      selectedSubCategory.rules
-    );
-    getCatgeories();
+    try {
+      await axios.post(
+        apis.updateSubCategoryRules + selectedSubCategory._id,
+        selectedSubCategory.rules
+      );
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function revertSubCategoryRules() {
@@ -400,15 +530,28 @@ function CategoryManagement() {
     );
     if (!conf) return;
     if (!selectedSubCategory) return;
-    await axios.post(apis.revertSubCategoryRules + selectedSubCategory._id);
-    getCatgeories();
+    try {
+      await axios.post(apis.revertSubCategoryRules + selectedSubCategory._id);
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function enforceSubCategoryRules() {
     if (!selectedSubCategory) return;
-    await axios.post(apis.revertSubCategoryRules + selectedSubCategory._id, {
-      rules: selectedCategory?.rules,
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.revertSubCategoryRules + selectedSubCategory._id, {
+        rules: selectedCategory?.rules,
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   function onDropCategory(ind) {
@@ -422,7 +565,13 @@ function CategoryManagement() {
     });
     dispatch(setCategories(updatedArr));
     setDraggedCategory(null);
-    changeCategoryOrder(updatedArr);
+    try {
+      changeCategoryOrder(updatedArr);
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   function onDropSubCategory(ind) {
@@ -438,8 +587,15 @@ function CategoryManagement() {
       return { ...state, subCategories: updatedArr };
     });
     setDraggedSubCategory(null);
-    changeSubCategoryOrder(updatedArr);
+    try {
+      changeSubCategoryOrder(updatedArr);
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   function onDropCategoryFields(ind) {
     const changeFrom = categoryFields[ind];
     if (changeFrom._id == draggedCategoryField._id) return;
@@ -450,11 +606,16 @@ function CategoryManagement() {
     });
     setCategoryFields(updatedArr);
     setDraggedCategoryField(null);
-    changeCategoryFieldOrder(updatedArr);
+    try {
+      changeCategoryFieldOrder(updatedArr);
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   function onDragCategoryFields(e, field) {
-    // setCategoryFields()
     setDraggedCategoryField(field);
   }
 
@@ -469,7 +630,13 @@ function CategoryManagement() {
     });
     setSubCategoryFields(updatedArr);
     setDraggedSubCategoryField(null);
-    changeSubCategoryFieldOrder(updatedArr);
+    try {
+      changeSubCategoryFieldOrder(updatedArr);
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   const [draggedCategory, setDraggedCategory] = useState(null);
@@ -485,35 +652,61 @@ function CategoryManagement() {
     // setCategoryFields()
     setDraggedSubCategoryField(field);
   }
-
   async function changeCategoryFieldOrder(arr) {
     if (!categoryFields.length || !selectedCategory) return;
-    await axios.post(apis.changeCategoryFieldOrder + selectedCategory._id, {
-      fields: arr,
-    });
-    getCatgeories();
+    try {
+      await axios.post(apis.changeCategoryFieldOrder + selectedCategory._id, {
+        fields: arr,
+      });
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
+
   async function changeCategoryOrder(arr) {
     if (!data) return;
-    await axios.post(apis.changeCategoryOrder, {
-      categories: arr.map((c, ind) => c._id),
-    });
+    try {
+      await axios.post(apis.changeCategoryOrder, {
+        categories: arr.map((c, ind) => c._id),
+      });
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+      getCatgeories();
+    }
   }
 
   async function changeSubCategoryOrder(arr) {
     if (!data) return;
-    await axios.post(apis.changeSubCategoryOrder + selectedCategory._id, {
-      subCategories: arr.map((c) => c._id),
-    });
+    try {
+      await axios.post(apis.changeSubCategoryOrder + selectedCategory._id, {
+        subCategories: arr.map((c) => c._id),
+      });
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+      getCatgeories();
+    }
   }
 
   async function changeSubCategoryFieldOrder(arr) {
     if (!subCategoryFields.length || !selectedSubCategory) return;
-    await axios.post(
-      apis.changeSubCategoryFieldOrder + selectedSubCategory._id,
-      { fields: arr }
-    );
-    getCatgeories();
+    try {
+      await axios.post(
+        apis.changeSubCategoryFieldOrder + selectedSubCategory._id,
+        { fields: arr }
+      );
+      getCatgeories();
+    } catch (err) {
+      notification.error(
+        err?.response?.data?.error || err?.response?.data || err?.message
+      );
+    }
   }
 
   async function addAddOn() {
