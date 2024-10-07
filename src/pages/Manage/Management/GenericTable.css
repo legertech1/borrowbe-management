@@ -166,3 +166,13 @@
   font-weight: 500;
   font-family: var(--font1);
 }
+.generic_table .__copy {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+  color: #555;
+  stroke: #555;
+  position: absolute;
+  stroke-width: 0.5;
+  margin-left: 4px;
+}

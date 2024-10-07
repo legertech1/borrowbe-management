@@ -104,6 +104,16 @@ const apis = {
   executeCommand: apiUrl + "/api/manage/command/",
   updateAccessCode: apiUrl + "/api/manage/update-access-code/",
   createUser: "/api/manage/create-user/",
+  getTotalUsers: "/api/dashboard/total-users",
+  getTotalAds: "/api/dashboard/total-ads",
+  getActiveUsers: "/api/dashboard/active-users",
+  getActiveAds: "/api/dashboard/active-ads",
+  getRevenueToday: "/api/dashboard/revenue-today",
+  getActiveCategories: "/api/dashboard/category-count",
+  getVisits: "/api/dashboard/visits",
+  getSearches: "/api/dashboard/searches/",
+  getUsersGained: "/api/dashboard/users-gained/",
+  getSearchAnalytics: "/api/dashboard/search-analytics/",
 };
 
 export default apis;

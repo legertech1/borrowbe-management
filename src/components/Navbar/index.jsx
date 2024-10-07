@@ -51,7 +51,10 @@ function Navbar() {
           </li>
         )}
         {pages["Dashboard"] && (
-          <li className={pathname.includes("dashboard") ? "active" : ""}>
+          <li
+            className={pathname.includes("dashboard") ? "active" : ""}
+            onClick={() => navigate("/dashboard")}
+          >
             {" "}
             <DashboardIcon />
             Dashboard

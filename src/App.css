@@ -17,8 +17,10 @@
   --yellow-light: #fec135bb;
   --red: rgb(221, 58, 58);
   --red-dark: #bd4141;
+  --red-light: #f12727;
   --loader-bg: linear-gradient(135deg, #1111, #1111, #11111120);
   --loader-bg-size: 300%;
+  --green: #12b012;
 }
 
 body {

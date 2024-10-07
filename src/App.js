@@ -16,6 +16,7 @@ import Terminal from "./components/Terminal";
 import AccessCodes from "./pages/AccessCodes";
 import Navbar from "./components/Navbar";
 import { collections } from "./pages/Manage/Management/manageConfig";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ function App() {
                 />
               )}
               {pages["Dashboard"] && (
-                <Route path="/dashboard" exact element={<Home />} />
+                <Route path="/dashboard" exact element={<Dashboard />} />
               )}
               {pages["Users"] && (
                 <Route

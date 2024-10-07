@@ -12,7 +12,12 @@ import Checkbox from "../../../components/Shared/Checkbox";
 import useNotification from "../../../hooks/useNotification";
 import ExpanededRow from "./ExpanededRow";
 import TablePagination from "./TablePagination";
-import { ArrowDownward, ArrowUpward, Visibility } from "@mui/icons-material";
+import {
+  ArrowDownward,
+  ArrowUpward,
+  ContentCopy,
+  Visibility,
+} from "@mui/icons-material";
 import PageControl from "../../../components/PageControl";
 import useConfirmDialogue from "../../../hooks/useConfirmDialog";
 function GenericTable({
@@ -346,7 +351,15 @@ function GenericTable({
                 key={columnIndex}
                 className={column}
               >
-                {column.path(row)}
+                {column.path(row)}{" "}
+                <ContentCopy
+                  className="__copy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(column.path(row));
+                  }}
+                />
               </td>
             );
           })}
