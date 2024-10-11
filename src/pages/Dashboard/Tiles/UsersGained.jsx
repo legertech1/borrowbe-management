@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import apis from "../../../services/api";
 import useNotification from "../../../hooks/useNotification";
 import Graph from "../../../components/Grapgh/recharts";
-import { Insights } from "@mui/icons-material";
+import { Insights, QueryStats } from "@mui/icons-material";
 import Dropdown from "../../../components/Shared/Dropdown";
 import { colors } from "@mui/material";
 
@@ -54,7 +54,7 @@ function UsersGained() {
       />
       <h2>
         <span>
-          <Insights /> Users and Ads gained{" "}
+          <QueryStats /> Users and Ads gained{" "}
         </span>
         <Dropdown
           array={[

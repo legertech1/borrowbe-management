@@ -125,8 +125,8 @@
   font-weight: 600;
   color: var(--blue);
 }
-.table_cont .eye_icon {
-  font-size: 26px;
+.table_cont .action svg {
+  font-size: 28px;
   cursor: pointer;
 }
 .generic_table td.action {

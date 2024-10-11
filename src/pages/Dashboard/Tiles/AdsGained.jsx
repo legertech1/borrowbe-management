@@ -5,6 +5,7 @@ import useNotification from "../../../hooks/useNotification";
 import Graph from "../../../components/Grapgh/recharts";
 import { Insights } from "@mui/icons-material";
 import Dropdown from "../../../components/Shared/Dropdown";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 
 function AdsGained() {
   const [dates, setDates] = useState([]);
@@ -53,7 +54,7 @@ function AdsGained() {
       />
       <h2>
         <span>
-          <Insights /> Visits and Searches{" "}
+          <QueryStatsIcon /> Visits and Searches{" "}
         </span>
         <Dropdown
           array={[

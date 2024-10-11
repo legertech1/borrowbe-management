@@ -114,6 +114,8 @@ const apis = {
   getSearches: "/api/dashboard/searches/",
   getUsersGained: "/api/dashboard/users-gained/",
   getSearchAnalytics: "/api/dashboard/search-analytics/",
+  markDocument: "/api/manage/mark/",
+  unmarkDocument: "/api/manage/unmark/",
 };
 
 export default apis;

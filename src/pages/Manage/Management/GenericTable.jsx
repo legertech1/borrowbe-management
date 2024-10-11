@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import {
   COLLECTIONS_NAMES,
   convertToReadableKey,
@@ -15,11 +16,15 @@ import TablePagination from "./TablePagination";
 import {
   ArrowDownward,
   ArrowUpward,
+  BookmarkBorderRounded,
+  BookmarkRounded,
   ContentCopy,
   Visibility,
 } from "@mui/icons-material";
 import PageControl from "../../../components/PageControl";
 import useConfirmDialogue from "../../../hooks/useConfirmDialog";
+import apis from "../../../services/api";
+import axios from "axios";
 function GenericTable({
   columns,
   data,
@@ -369,6 +374,56 @@ function GenericTable({
                 className="eye_icon"
                 onClick={() => openDetails(row._id)}
               />
+              <span>
+                {row.marked ? (
+                  <BookmarkRounded
+                    onClick={async () => {
+                      try {
+                        const { res } = await axios.get(
+                          apis.unmarkDocument +
+                            currentCollection +
+                            "/" +
+                            row._id
+                        );
+                        setRows((rows) =>
+                          rows.map((r) =>
+                            r._id == row._id ? { ...r, marked: false } : r
+                          )
+                        );
+                      } catch (err) {
+                        console.log(err);
+                        notification.error(
+                          err?.response?.data?.error ||
+                            err?.response?.data ||
+                            err?.message
+                        );
+                      }
+                    }}
+                  />
+                ) : (
+                  <BookmarkBorderRounded
+                    onClick={async () => {
+                      try {
+                        const { res } = await axios.get(
+                          apis.markDocument + currentCollection + "/" + row._id
+                        );
+                        setRows((rows) =>
+                          rows.map((r) =>
+                            r._id == row._id ? { ...r, marked: true } : r
+                          )
+                        );
+                      } catch (err) {
+                        console.log(err);
+                        notification.error(
+                          err?.response?.data?.error ||
+                            err?.response?.data ||
+                            err?.message
+                        );
+                      }
+                    }}
+                  />
+                )}
+              </span>
             </td>
           )}
         </tr>
