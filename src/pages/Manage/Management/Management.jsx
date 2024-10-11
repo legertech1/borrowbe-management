@@ -44,7 +44,7 @@ function UserManagement({ currentCollection }) {
     setFilters([
       {
         label: allKeys[currentCollection.key][0].label,
-        condition: conditions[0].label,
+        condition: { text: conditions[0].label, value: conditions[0].key },
         value: "",
       },
     ]);
@@ -92,7 +92,7 @@ function UserManagement({ currentCollection }) {
 
     const newFilteredArray = filteredArray.map((filter) => {
       const { label, condition, value } = filter;
-
+      console.log(label, condition, value, conditions);
       return {
         key: allKeys[currentCollection.key].filter(
           (obj) =>
