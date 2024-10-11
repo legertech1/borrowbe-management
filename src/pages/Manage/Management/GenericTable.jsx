@@ -47,8 +47,7 @@ function GenericTable({
   const [rows, setRows] = useState([]);
   const confirm = useConfirmDialogue();
   const [sortOrder, setSortOrder] = useState({
-    column: curr?.sort || null,
-    direction: "asc",
+    ...curr.sort,
   });
 
   const { currentPage, totalPages } = pagination;
@@ -74,7 +73,7 @@ function GenericTable({
   };
   const handleSort = () => {
     const isAsc = sortOrder.direction === "asc";
-    console.log(sortOrder);
+
     if (!sortOrder.column) return;
 
     const sorted = [...data].sort((a, b) => {
@@ -356,7 +355,9 @@ function GenericTable({
                 key={columnIndex}
                 className={column}
               >
-                {column.path(row)}{" "}
+                {column.path(row)?.length > 100
+                  ? column.path(row)?.slice(0, 100) + "..."
+                  : column.path(row)}
                 <ContentCopy
                   className="__copy"
                   onClick={(e) => {

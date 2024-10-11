@@ -228,13 +228,52 @@ export const collections = [
     label: "Users",
     key: COLLECTIONS_NAMES.USER,
     keys: userKeys,
-    sort: { label: "Customer ID", path: (u) => u?.customerID },
+    sort: {
+      column: { label: "Created", path: (u) => u?.createdAt },
+      direction: "desc",
+    },
+    sortOptions: [
+      { text: "Created At (asc)", value: { createdAt: 1 } },
+      { text: "Created At (desc)", value: { createdAt: -1 } },
+      { text: "CustomerID (asc)", value: { customerID: 1 } },
+      { text: "CustomerID (desc)", value: { customerID: -1 } },
+      {
+        text: "Number of Ads (asc)",
+        value: { "data.postedAds.totalAds": 1 },
+      },
+      {
+        text: "Number of Ads (desc)",
+        value: { "data.postedAds.totalAds": -1 },
+      },
+      {
+        text: "Name (asc)",
+        value: { firstName: 1, lastName: 1 },
+      },
+      { text: "Name (desc)", value: { firstName: -1, lastName: -1 } },
+    ],
   },
   {
     label: "Ads",
     key: COLLECTIONS_NAMES.AD,
     keys: adKeys,
-    sort: { label: "Listing ID", path: (a) => a.listingID },
+    sort: {
+      column: { label: "Created", path: (u) => u?.createdAt },
+      direction: "desc",
+    },
+    sortOptions: [
+      { text: "Created At (asc)", value: { createdAt: 1 } },
+      { text: "Created At (desc)", value: { createdAt: -1 } },
+      { text: "ListingID (asc)", value: { listingID: 1 } },
+      { text: "ListingID (desc)", value: { listingID: -1 } },
+      {
+        text: "Price (asc)",
+        value: { price: 1 },
+      },
+      {
+        text: "Price (desc)",
+        value: { price: -1 },
+      },
+    ],
   },
 ];
 

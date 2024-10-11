@@ -40,6 +40,7 @@ function UserManagement({ currentCollection }) {
     currentPage: 1,
   });
 
+  const [sort, setSort] = useState(currentCollection.sortOptions[1]);
   const setInitialFilters = () => {
     setFilters([
       {
@@ -55,7 +56,7 @@ function UserManagement({ currentCollection }) {
       setInitialFilters();
       handleSearch();
     }
-  }, [currentCollection.key]);
+  }, [currentCollection.key, sort]);
 
   const reset = () => {
     setRows([]);
@@ -151,6 +152,7 @@ function UserManagement({ currentCollection }) {
         count: Number(qty),
         collectionName: currentCollection.key,
         page: newPage,
+        sort: sort.value,
       });
 
       const { data, pagination } = response.data;
@@ -304,10 +306,12 @@ function UserManagement({ currentCollection }) {
                 <ClearAll />
                 Clear All
               </Button>
+
               <Button onClick={addNewFilterRow} className="secondary">
                 <Add />
                 Add New Filter
               </Button>
+
               {currentCollection.label == "Users" && (
                 <Button
                   onClick={() => {
@@ -318,10 +322,19 @@ function UserManagement({ currentCollection }) {
                   <Add /> Add User
                 </Button>
               )}
+              <Dropdown
+                array={currentCollection.sortOptions}
+                value={sort}
+                setValue={(v) => setSort(v)}
+                pretext={"Sort By: "}
+              />
               <div className="num_results">
                 Number of Results:{" "}
                 <Input
                   value={qty}
+                  onKeyDown={(e) =>
+                    e.key == "Enter" && !isNaN(qty) && handleSearch()
+                  }
                   onChange={(e) => {
                     if (isNaN(e.target.value)) return;
                     setQty(Math.min(500, e.target.value));

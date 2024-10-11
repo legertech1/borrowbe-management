@@ -9,6 +9,7 @@ function Dropdown({
   error,
   icons,
   subtext,
+  pretext,
   placeholder = "Select an option",
 }) {
   const options = useRef();
@@ -83,6 +84,7 @@ function Dropdown({
               if (item == value) return icons[index];
               else return icon;
             }, null)}
+          {pretext}
           {value?.text || value || placeholder}
         </div>
 
