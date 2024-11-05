@@ -38,6 +38,9 @@ body.no-scroll {
   text-align: center;
   gap: 4px;
 }
+.confirm-message p {
+  margin: 0;
+}
 .confirm-message svg {
   height: 24px;
   width: 24px;
@@ -49,7 +52,9 @@ body.no-scroll {
   justify-content: space-between;
   gap: 16px;
 }
-
+.confirm-dialog .confirm-message span {
+  color: var(--blue);
+}
 .button-container button {
   padding: 14px 20px;
   margin-left: 10px;

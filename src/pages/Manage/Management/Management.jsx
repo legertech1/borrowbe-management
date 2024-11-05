@@ -7,28 +7,26 @@ import Button from "../../../components/Shared/Button";
 import apis from "../../../services/api";
 import "./Management.css";
 import {
-  COLLECTIONS_NAMES,
   allKeys,
   buildFilterQuery,
-  collections,
   conditions,
   prepareDataForTable,
 } from "./manageConfig";
 import GenericTable from "./GenericTable";
 
-import { Link } from "react-router-dom";
 import Modal from "../../../components/Modal";
 import AddUserForm from "../AddUserForm/index";
 import { useSelector } from "react-redux";
 import { Add, ClearAll, Search } from "@mui/icons-material";
 import useNotification from "../../../hooks/useNotification";
 import useConfirmDialog from "../../../hooks/useConfirmDialog";
+import Checkbox from "../../../components/Shared/Checkbox";
 
 function UserManagement({ currentCollection }) {
   const [filters, setFilters] = useState([]);
-
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const user = useSelector((state) => state.auth);
+  const [ignoreMaked, setIgnoreMarked] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [qty, setQty] = useState(20);
@@ -52,7 +50,7 @@ function UserManagement({ currentCollection }) {
   };
 
   useEffect(() => {
-    if (currentCollection.key) {
+    if (currentCollection.key && !loading) {
       setInitialFilters();
       handleSearch();
     }
@@ -148,7 +146,9 @@ function UserManagement({ currentCollection }) {
       const filterQuery = prepareFilters(filters);
 
       const response = await axios.post(apis.manageSearch, {
-        filters: filterQuery,
+        filters: ignoreMaked
+          ? { ...filterQuery, marked: { $ne: true } }
+          : filterQuery,
         count: Number(qty),
         collectionName: currentCollection.key,
         page: newPage,
@@ -328,6 +328,13 @@ function UserManagement({ currentCollection }) {
                 setValue={(v) => setSort(v)}
                 pretext={"Sort By: "}
               />
+              <div className="ignore_marked">
+                <Checkbox
+                  checked={ignoreMaked}
+                  setChecked={(v) => setIgnoreMarked(v)}
+                />{" "}
+                Ignore Marked {currentCollection.label}
+              </div>
               <div className="num_results">
                 Number of Results:{" "}
                 <Input

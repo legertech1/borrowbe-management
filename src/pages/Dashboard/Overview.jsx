@@ -22,8 +22,36 @@ function Overview() {
       <ActiveCategories />
       <Visits />
       <Searches />
-      <AdsGained />
-      <UsersGained />
+      <AdsGained
+        maximise={(ref) => {
+          // ref.current.style.gridColumnStart = 1;
+          ref.current.style.minWidth = "90vw";
+          // ref.current.style.position = "absolute";
+          ref.current.style.right = "0";
+          // ref.current.style.top = "16px";
+        }}
+        minimise={(ref) => {
+          ref.current.style.minWidth = "760px";
+          // ref.current.style.position = "static";
+          // ref.current.style.right = "unset";
+          // ref.current.style.top = "16px";
+        }}
+      />
+      <UsersGained
+        maximise={(ref) => {
+          // ref.current.style.gridColumnStart = 1;
+          ref.current.style.minWidth = "90vw";
+          // ref.current.style.position = "absolute";
+          ref.current.style.right = "0";
+          // ref.current.style.top = "16px";
+        }}
+        minimise={(ref) => {
+          ref.current.style.minWidth = "760px";
+          // ref.current.style.position = "static";
+          // ref.current.style.right = "unset";
+          // ref.current.style.top = "16px";
+        }}
+      />
     </div>
   );
 }

@@ -83,9 +83,12 @@ function GenericTable({
           (isAsc ? 1 : -1)
         );
       }
-      if (typeof sortOrder.column.path(a) === "number") {
+      if (
+        typeof sortOrder.column.path(a) === "number" ||
+        typeof sortOrder.column.path(a) === "undefined"
+      ) {
         return (
-          (sortOrder.column.path(a) - sortOrder.column.path(b)) *
+          (sortOrder.column.path(a) || 0 - sortOrder.column.path(b) || 0) *
           (isAsc ? 1 : -1)
         );
       }
@@ -245,21 +248,31 @@ function GenericTable({
     ) {
       if (column.label === "Status") {
         confirm.openDialog(
-          "Are you sure you want to update the status for Ad no. " +
-            row.listingID,
+          selectedRows.length ? (
+            <p>
+              Are you sure you want to update <span>{column.label}</span> for{" "}
+              <span>{selectedRows.length} ads</span>
+            </p>
+          ) : (
+            <p>
+              Are you sure you want to update <span>{column.label}</span> for Ad
+              with title "<span>{row.title}</span>"
+            </p>
+          ),
 
-          () =>
+          () => {
             updateItems(
-              [row._id],
+              selectedRows.length ? [row._id, ...selectedRows] : [row._id],
               {
-                ...row,
                 meta: {
                   ...row.meta,
                   status: row.meta.status === "active" ? "inactive" : "active",
                 },
               },
               currentCollection
-            )
+            );
+            setSelectedRows([]);
+          }
         );
       }
     } else if (
@@ -267,16 +280,28 @@ function GenericTable({
       currentCollection === COLLECTIONS_NAMES.DELETED_USER
     ) {
       confirm.openDialog(
-        "Are you sure you want to update Account Locking status for User no. " +
-          row.customerID,
-
-        () =>
+        selectedRows.length ? (
+          <p>
+            Are you sure you want to update{" "}
+            <span>{column.label.slice(0, column.label.length - 1)}</span> status
+            for <span>{selectedRows.length} users</span>
+          </p>
+        ) : (
+          <p>
+            Are you sure you want to update{" "}
+            <span>{column.label.slice(0, column.label.length - 1)}</span> status
+            for <span>{row.firstName + " " + row.lastName}</span>
+          </p>
+        ),
+        () => {
           updateItems(
-            [row],
+            selectedRows.length ? [row._id, ...selectedRows] : [row._id],
 
             column.update(row),
             currentCollection
-          )
+          );
+          setSelectedRows([]);
+        }
       );
     }
   };
@@ -307,7 +332,7 @@ function GenericTable({
           )}
 
           {columns.map((column, columnIndex) => {
-            const switchFields = ["Account Locked?", "Verified", "Status"];
+            const switchFields = ["Account Locked?", "Verified?", "Status"];
 
             const dateFields = ["Created", "Updated"];
 

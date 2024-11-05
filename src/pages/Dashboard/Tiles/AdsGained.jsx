@@ -1,20 +1,22 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import apis from "../../../services/api";
 import useNotification from "../../../hooks/useNotification";
 import Graph from "../../../components/Grapgh/recharts";
-import { Insights } from "@mui/icons-material";
+import { CloseFullscreen, Insights, OpenInFull } from "@mui/icons-material";
 import Dropdown from "../../../components/Shared/Dropdown";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import { Button } from "../../Manage/ManageShared";
 
-function AdsGained() {
+function AdsGained({ maximise, minimise }) {
   const [dates, setDates] = useState([]);
   const [visits, setVisits] = useState([]);
   const [searches, setSearches] = useState([]);
   const [days, setDays] = useState({
-    text: "30 days",
-    value: 30,
+    text: "last week",
+    value: 7,
   });
+  const [expanded, setExpanded] = useState(false);
   const notification = useNotification();
   async function getData(days) {
     try {
@@ -38,8 +40,9 @@ function AdsGained() {
   useEffect(() => {
     if (days.value) getData(days.value);
   }, [days]);
+  const ref = useRef();
   return (
-    <div className="tile ads_gained graph">
+    <div className="tile ads_gained graph" ref={ref}>
       <Graph
         dates={dates}
         dataObj={{
@@ -56,16 +59,30 @@ function AdsGained() {
         <span>
           <QueryStatsIcon /> Visits and Searches{" "}
         </span>
-        <Dropdown
-          array={[
-            { text: "7 days", value: 7 },
-            { text: "14 days", value: 14 },
-            { text: "30 days", value: 30 },
-            { text: "60 days", value: 60 },
-          ]}
-          value={days}
-          setValue={(v) => setDays(v)}
-        />
+        <span>
+          {" "}
+          <Dropdown
+            array={[
+              { text: "last week", value: 7 },
+              { text: "last 2 weeks", value: 14 },
+              { text: "last month", value: 30 },
+              { text: "last 2 months", value: 60 },
+              { text: "last 3 month", value: 90 },
+              { text: "last 6 months", value: 180 },
+            ]}
+            value={days}
+            setValue={(v) => setDays(v)}
+          />
+          <Button
+            className={"maximise" + (expanded ? " open" : " close")}
+            onClick={() => {
+              expanded ? minimise(ref) : maximise(ref);
+              setExpanded(!expanded);
+            }}
+          >
+            {!expanded ? <OpenInFull /> : <CloseFullscreen />}
+          </Button>
+        </span>
       </h2>
     </div>
   );

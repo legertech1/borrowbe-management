@@ -119,7 +119,15 @@ const getTheseKeysOnly = (collection) => {
           return { accountLocked: u.accountLocked ? false : true };
         },
       },
+
       { label: "Ads", path: (u) => u?.data?.postedAds?.total },
+      {
+        label: "Verified?",
+        path: (u) => u?.verified,
+        update: (u) => {
+          return { verified: u.verified ? false : true };
+        },
+      },
     ],
 
     ads: [
